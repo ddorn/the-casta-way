@@ -4,7 +4,7 @@ Greetings stranger ! The goal of this simple game is not to be the greatest game
 
 Our original idea was to make a side scroller or top view game where you need to help a disciple of the legendary *Casta* to go up the Casta Way. The Casta Way is a long road made of gold by Casta himself in the ancient times. According to the legend, Casta hid the secret of happiness at the end of that road, but there are many obstacles in the way... Good luck to all of us, and we hope that you too will find the secret of happiness. In the meantime we are definitely looking forwards to enjoy your games !
 
-All you will need to play this game is a recent version of python (>= 3.7), pygame installed and a bit of skill... or luck !
+All you will need to play this game is a recent version of python (>= 3.7), pygame installed, to run `python ./run_game.py` and a bit of skill... or luck !
 
 The Brothers
 
