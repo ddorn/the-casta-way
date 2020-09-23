@@ -4,7 +4,13 @@ FPS = 60
 BG_COLOR = 0xffa500
 
 class Files:
+    # Directories
     ROOT = Path(__file__).parent.parent
     ASSETS = ROOT / "assets"
     SOUND = ASSETS / "sound"
     IMAGES = ASSETS / "images"
+    FONTS = ASSETS / "fonts"
+
+    # Files
+    MAIN_FONT = FONTS / "ThaleahFat.ttf"
+

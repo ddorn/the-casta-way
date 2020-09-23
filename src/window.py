@@ -1,0 +1,87 @@
+import pygame
+from pygame import Vector2 as Vec
+from pygame import Rect
+
+from .utils import i
+
+
+class State:
+
+    def logic(self):
+        """
+        All the logic of the game happens here, ie. how to get from one frame to another.
+
+        This function must return the next state of the app.
+        """
+
+        return self
+
+    def draw(self, display):
+        """Here we draw everything on the display"""
+
+    def key_down(self, event):
+        pass
+
+
+
+class Window:
+    SIZE = Vec(400, 400)
+    NAME = "The Casta Way"
+    FPS = 60
+    BORDER_COLOR = 0x000000
+
+    def __init__(self, state: State):
+        self.real_size = Vec(pygame.display.list_modes()[0])
+        self.view_port: Rect = None
+        self.view_port_display: pygame.Surface = None
+        self.real_display: pygame.Surface = None
+        self.display = pygame.Surface(self.SIZE)
+
+
+        self.running = True
+        self.clock = pygame.time.Clock()
+
+        self.state = state
+
+
+    def set_display(self, size=None):
+        """Setup the display to a given size."""
+        self.real_size = Vec(size or self.real_size)
+        self.real_display = pygame.display.set_mode(i(self.real_size), pygame.RESIZABLE)
+        self.real_display.fill(self.BORDER_COLOR)
+
+        # We find the viewport so we have black border if the ratio do not match
+        scale = min(self.real_size.x / self.SIZE.x, self.real_size.y / self.SIZE.y)
+        area = self.SIZE * scale
+        rect = Rect((self.real_size - area) / 2, area)
+        print(rect, self.real_size, self.SIZE * scale, scale)
+        self.view_port = rect
+        self.view_port_display = self.real_display.subsurface(rect)
+
+    def run(self):
+        # Open the window
+        self.set_display()
+        # And set its name
+        pygame.display.set_caption(self.NAME)
+
+        # Main loop. Each repetition is one frame.
+        while self.running:
+            self.events()
+            self.state = self.state.logic()
+            self.state.draw(self.display)
+
+            # We scale the display to the viewport, which is the part of the window without the black borders.
+            pygame.transform.scale(self.display, self.view_port.size, self.view_port_display)
+            pygame.display.update()
+            self.clock.tick(self.FPS)
+
+    def events(self):
+        """Handle all events mostly by calling specialised functions"""
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.VIDEORESIZE:
+                self.set_display(event.size)
+            elif event.type == pygame.KEYDOWN:
+                self.state.key_down(event)
+
