@@ -1,7 +1,11 @@
+from time import time, sleep
+
 import pygame
 from pygame import Vector2 as Vec
 from pygame import Rect
 
+from .clock import Clock
+from .constants import GAME_SIZE
 from .utils import i
 
 
@@ -25,9 +29,10 @@ class State:
 
 
 class Window:
-    SIZE = Vec(400, 400)
+    SIZE = Vec(GAME_SIZE)
     NAME = "The Casta Way"
     FPS = 60
+    LOGIC_FPS = 30
     BORDER_COLOR = 0x000000
 
     def __init__(self, state: State):
@@ -39,10 +44,11 @@ class Window:
 
 
         self.running = True
-        self.clock = pygame.time.Clock()
 
         self.state = state
 
+        self.logic_clock = Clock(self.LOGIC_FPS)
+        self.render_clock = Clock(self.FPS)
 
     def set_display(self, size=None):
         """Setup the display to a given size."""
@@ -54,7 +60,7 @@ class Window:
         scale = min(self.real_size.x / self.SIZE.x, self.real_size.y / self.SIZE.y)
         area = self.SIZE * scale
         rect = Rect((self.real_size - area) / 2, area)
-        print(rect, self.real_size, self.SIZE * scale, scale)
+        
         self.view_port = rect
         self.view_port_display = self.real_display.subsurface(rect)
 
@@ -67,13 +73,18 @@ class Window:
         # Main loop. Each repetition is one frame.
         while self.running:
             self.events()
-            self.state = self.state.logic()
-            self.state.draw(self.display)
 
-            # We scale the display to the viewport, which is the part of the window without the black borders.
-            pygame.transform.scale(self.display, self.view_port.size, self.view_port_display)
-            pygame.display.update()
-            self.clock.tick(self.FPS)
+            while self.logic_clock.tick():
+                self.state = self.state.logic()
+
+            if self.render_clock.tick_all():
+                self.state.draw(self.display)
+
+                # We scale the display to the viewport, which is the part of the window without the black borders.
+                pygame.transform.scale(self.display, self.view_port.size, self.view_port_display)
+                pygame.display.update()
+
+            sleep(min(self.render_clock.time_left, self.logic_clock.time_left))
 
     def events(self):
         """Handle all events mostly by calling specialised functions"""

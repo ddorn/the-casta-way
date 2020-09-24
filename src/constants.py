@@ -1,7 +1,7 @@
 from pathlib import Path
 
 FPS = 60
-BG_COLOR = 0xffa500
+GAME_SIZE = (400, 400)
 
 class Files:
     # Directories
