@@ -3,7 +3,7 @@ from pathlib import Path
 FPS = 60
 GAME_SIZE = (400, 300)
 INF = float('inf')
-
+WHITE = (240, 240, 240)
 
 class Files:
     # Directories
@@ -16,4 +16,3 @@ class Files:
 
     # Files
     MAIN_FONT = FONTS / "ThaleahFat.ttf"
-

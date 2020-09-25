@@ -10,6 +10,7 @@ from src.entities import Particle
 from src.entities.decor import Tree, Rock, Beer
 from src.entities.particles import ParticleSystem
 from src.entities.player import Player
+from src.states.gameover import GameOver
 from src.utils import load_cached_image
 from src.window import State
 
@@ -60,7 +61,7 @@ class GameState(State):
 
         if not self.player.alive:
             from src.states import IntroState
-            return IntroState()
+            return GameOver(self.score)
         return self
 
     def draw(self, display, prop):
