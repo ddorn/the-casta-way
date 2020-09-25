@@ -10,7 +10,7 @@ class IntroState(State):
     TEXT_COLOR = (240, 240, 240)
 
     def __init__(self):
-        self.duration = 120  # two seconds
+        self.duration = 60  # two seconds
         self.text = self.get_title_surf()
 
     def get_title_surf(self):
@@ -26,7 +26,7 @@ class IntroState(State):
         else:
             return self
 
-    def draw(self, display):
+    def draw(self, display, prop):
         display.fill(self.BG_COLOR)
 
         if self.duration % 20 < 14:

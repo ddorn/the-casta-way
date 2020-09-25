@@ -1,6 +1,7 @@
 import pygame
 
 from src.constants import Files
+from src.entities.player import Player
 from src.window import State
 
 
@@ -11,16 +12,27 @@ class GameState(State):
         self.score = 0
         self.huge_font = pygame.font.Font(str(Files.MAIN_FONT), 64)
 
+        self.player = Player()
+        self.entities = [self.player]
+
     def logic(self):
         self.score += 1
 
+        # Update each entity
+        for entity in self.entities:
+            entity.logic()
+
         return self
 
-    def draw(self, display):
+    def draw(self, display, prop):
         display.fill(self.BG_COLOR)
 
         # Draw the golden road
-        display.fill(0xfecb20, (0, 100, 400, 200))
+        display.fill(0xfecb20, (0, 75, 400, 200))
+
+        # Draw each entity
+        for entity in self.entities:
+            entity.draw(display, prop)
 
         # Draw the score
         score_surf = self.huge_font.render("{:04}".format(self.score), False, (240, 240, 240), self.BG_COLOR)

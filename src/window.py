@@ -1,4 +1,5 @@
 from time import time, sleep
+from typing import Type
 
 import pygame
 from pygame import Vector2 as Vec
@@ -20,7 +21,7 @@ class State:
 
         return self
 
-    def draw(self, display):
+    def draw(self, display, prop):
         """Here we draw everything on the display"""
 
     def key_down(self, event):
@@ -35,17 +36,21 @@ class Window:
     LOGIC_FPS = 30
     BORDER_COLOR = 0x000000
 
-    def __init__(self, state: State):
+    def __init__(self, state: Type[State]):
         self.real_size = Vec(pygame.display.list_modes()[0])
         self.view_port: Rect = None
         self.view_port_display: pygame.Surface = None
         self.real_display: pygame.Surface = None
         self.display = pygame.Surface(self.SIZE)
 
+        # Open the window
+        self.set_display()
+        # And set its name
+        pygame.display.set_caption(self.NAME)
 
         self.running = True
 
-        self.state = state
+        self.state = state()
 
         self.logic_clock = Clock(self.LOGIC_FPS)
         self.render_clock = Clock(self.FPS)
@@ -60,15 +65,11 @@ class Window:
         scale = min(self.real_size.x / self.SIZE.x, self.real_size.y / self.SIZE.y)
         area = self.SIZE * scale
         rect = Rect((self.real_size - area) / 2, area)
-        
+
         self.view_port = rect
         self.view_port_display = self.real_display.subsurface(rect)
 
     def run(self):
-        # Open the window
-        self.set_display()
-        # And set its name
-        pygame.display.set_caption(self.NAME)
 
         # Main loop. Each repetition is one frame.
         while self.running:
@@ -78,7 +79,7 @@ class Window:
                 self.state = self.state.logic()
 
             if self.render_clock.tick_all():
-                self.state.draw(self.display)
+                self.state.draw(self.display, self.logic_clock.tick_prop)
 
                 # We scale the display to the viewport, which is the part of the window without the black borders.
                 pygame.transform.scale(self.display, self.view_port.size, self.view_port_display)

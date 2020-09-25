@@ -1,7 +1,7 @@
 from pathlib import Path
 
 FPS = 60
-GAME_SIZE = (400, 400)
+GAME_SIZE = (400, 300)
 
 class Files:
     # Directories

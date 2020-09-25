@@ -1,13 +1,14 @@
 import pygame
 
-from src.states import IntroState
+from src.states import IntroState, GameState
 from src.window import Window
 
 
 
 def the_casta_way():
     pygame.init()
-    game = Window(IntroState())
+    # game = Window(IntroState())
+    game = Window(GameState)
     return game.run()
 
 
