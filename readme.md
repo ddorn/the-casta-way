@@ -11,3 +11,10 @@ The Brothers
 
 ---
 Side note : There are four goats hidden in this text ^^
+
+
+
+### Assets used 
+
+- sprites: https://vryell.itch.io/tiny-adventure-pack
+- some sfx : https://kronbits.itch.io/freesfx

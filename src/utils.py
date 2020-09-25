@@ -2,7 +2,10 @@
 Here you can find utility functions used anywhere else in the code.
 Mostly they are mathematical functions or conversion.
 """
+from functools import lru_cache
 from math import atan, pi
+
+import pygame
 
 
 def i(vec):
@@ -24,3 +27,15 @@ def angle(vec) -> "radians":
     if x < 0:
         return a + pi
     return a
+
+
+@lru_cache()
+def load_cached_image(path, with_transparency=False):
+    surf = pygame.image.load(str(path))
+    print(f"Load {path}, {surf.get_width()}x{surf.get_height()}")
+
+    # convert and convert_alpha give optimised versions for bliting
+    if with_transparency:
+        return surf.convert()
+    else:
+        return surf.convert_alpha()

@@ -1,6 +1,8 @@
 import pygame
 from pygame import Vector2 as Vec
 
+from src.utils import load_cached_image
+
 
 class BaseSprite:
     def logic(self):
@@ -29,10 +31,9 @@ class Animation(BaseSprite):
 
     @classmethod
     def from_sheet(cls, path, frame_width, frame_duration=3, offset=(0, 0)):
-        atlas = pygame.image.load(str(path)).convert()
+        atlas = load_cached_image(path)
         size = atlas.get_size()
         nb_frames = size[0] // frame_width
-        print(f"Load {path}, {size[0]}x{size[1]}, {nb_frames} frames")
 
         sprites = []
         for i in range(nb_frames):

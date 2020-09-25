@@ -62,7 +62,7 @@ class Window:
         self.real_display.fill(self.BORDER_COLOR)
 
         # We find the viewport so we have black border if the ratio do not match
-        scale = min(self.real_size.x / self.SIZE.x, self.real_size.y / self.SIZE.y)
+        scale = min(self.real_size.x // self.SIZE.x, self.real_size.y // self.SIZE.y)
         area = self.SIZE * scale
         rect = Rect((self.real_size - area) / 2, area)
 
@@ -79,7 +79,9 @@ class Window:
                 self.state = self.state.logic()
 
             if self.render_clock.tick_all():
-                self.state.draw(self.display, self.logic_clock.tick_prop)
+                # I disabled the interpolation because I don't know how to make it
+                # work with the camera movement yet
+                self.state.draw(self.display, 0 * self.logic_clock.tick_prop)
 
                 # We scale the display to the viewport, which is the part of the window without the black borders.
                 pygame.transform.scale(self.display, self.view_port.size, self.view_port_display)

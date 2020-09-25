@@ -20,9 +20,10 @@ class Particle:
         self.pos += vel
         self.speed -= self.friction
 
-    def draw(self, display, prop):
+    def draw(self, display, camera, prop):
         vel = Vec(self.speed * cos(self.angle), self.speed * sin(self.angle))
-        display.fill(self.color, (self.pos + vel * prop, (self.size, self.size)))
+        screen_pos = camera.to_screen(self.pos + vel * prop)
+        display.fill(self.color, (screen_pos, (self.size, self.size)))
 
 
 class ParticleSystem(Entity):
@@ -45,6 +46,6 @@ class ParticleSystem(Entity):
 
         self.particles.difference_update(to_remove)
 
-    def draw(self, display, prop):
+    def draw(self, display, camera, prop):
         for particle in self.particles:
-            particle.draw(display, prop)
+            particle.draw(display, camera, prop)

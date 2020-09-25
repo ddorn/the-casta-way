@@ -89,6 +89,11 @@ class Player(Entity):
         self.vel = (self.vel + Vec(speed_x, speed_y) * self.SPEED) / 2
         self.pos += self.vel
 
+        # We clamp the position to the screen
+        if self.pos.x < game.camera.scroll:
+            self.pos.x = game.camera.scroll
+            self.vel.x = 0
+
         self.set_sprite()
 
         if self.walking():
