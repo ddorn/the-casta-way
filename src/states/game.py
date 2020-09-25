@@ -1,9 +1,11 @@
-from random import randrange
+from math import pi
+from random import randrange, gauss, uniform
 
 import pygame
 
 from src.camera import Camera
 from src.constants import Files, GAME_SIZE
+from src.entities import Particle
 from src.entities.decor import Decor
 from src.entities.particles import ParticleSystem
 from src.entities.player import Player
@@ -33,8 +35,25 @@ class GameState(State):
             layer = (pos[1]) / 75
             self.entities.append(Decor(pos, layer))
 
+    def road_particles(self):
+        x = randrange(0, GAME_SIZE[0]) + self.camera.scroll
+        y = randrange(75, 275)
+
+        self.particles.add(Particle(
+            pos=(x, y),
+            speed=0.2,
+            angle=-uniform(pi / 3, 2 * pi / 3),
+            friction=0.01,
+            size=2,
+            color=0xffffcc,
+        ))
+
+    def key_down(self, event):
+        self.player.key_down(event)
+
     def logic(self):
         self.score += 1
+        self.road_particles()
 
         # Update each entity
         for entity in self.entities[:]:
@@ -54,7 +73,7 @@ class GameState(State):
         display.fill(0xfecb20, (0, 75, 400, 200))
 
         # Draw each entity, the ones ate the bottom of the screen first
-        for entity in sorted(self.entities, key=lambda e: (e.layer, e.pos[1] + e.size[1])):
+        for entity in sorted(self.entities, key=lambda e: e.pos[1] + e.size[1]):
             entity.draw(display, self.camera, prop)
 
         # Draw the score

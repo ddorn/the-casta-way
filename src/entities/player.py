@@ -1,3 +1,4 @@
+from collections import namedtuple
 from math import pi
 from random import random, gauss, randrange
 
@@ -11,6 +12,7 @@ from src.entities import Entity, Particle
 # Directions
 from src.utils import angle
 
+# Those correspond to the filenames of the animations
 RIGHT = "right"
 DOWN = "down"
 LEFT = "left"
@@ -18,11 +20,37 @@ UP = "up"
 # Actions
 IDLE = "idle"
 WALK = "walk"
+ATTACK = "atk"
 
+
+# index of Offset, width, speed
+OFFSET = 0
+WIDTH = 1
+SPEED = 2
+
+ANIMS = {
+    (ATTACK, LEFT): [(-3, -2), 16, 1],
+    (ATTACK, RIGHT): [(-3, -2), 16, 1],
+    (ATTACK, UP): [(-10, -2), 23, 1],
+    (ATTACK, DOWN): [(-3, -2), 23, 1],
+
+    (WALK, LEFT): [(-3, -2), 16, 4],
+    (WALK, RIGHT): [(-3, -2), 16, 4],
+    (WALK, UP): [(-3, -2), 16, 4],
+    (WALK, DOWN): [(-3, -2), 16, 4],
+
+    (IDLE, LEFT): [(-3, -1), 16, 4],
+    (IDLE, RIGHT): [(-3, -1), 16, 4],
+    (IDLE, UP): [(-3, -1), 16, 4],
+    (IDLE, DOWN): [(-3, -1), 16, 4],
+}
+
+ATTACK_LENGTH = ANIMS[ATTACK, LEFT][SPEED] * 6
+ATTACK_COOL_DOWN = 3 + ATTACK_LENGTH
 
 class Player(Entity):
     DEFAULT_COLOR = 0xff0000
-    SPEED = 2  # Pixels per seconds
+    SPEED = 3  # Pixels per seconds
     SHADOW_SIZE = (14, 6)
 
     def __init__(self):
@@ -36,19 +64,29 @@ class Player(Entity):
         self.animations = {
             (action, direction): SpriteCompo(
                 shadow,
-                Animation.from_sheet(Files.IMAGES / f"{action}_{direction}.png", 16, 4, (-3, -2 + (action == IDLE)))
+                Animation.from_sheet(
+                    Files.IMAGES / f"{action}_{direction}.png",
+                    width,
+                    frame_duration=speed,
+                    offset=offset,
+                )
             )
-            for direction in [RIGHT, DOWN, LEFT, UP]
-            for action in [IDLE, WALK]
+            for ((action, direction), (offset, width, speed)) in ANIMS.items()
         }
 
         self.direction = DOWN
+
+        self.attack_duration = -1
+        self.attack_cool_down = 0
 
         self.foot_step_particle_delay = 0
 
     def walking(self):
         """Whether the player is walking."""
         return self.vel.length_squared() > 1
+
+    def attacking(self):
+        return self.attack_duration >= 0
 
     def feet(self):
         """Return the position of the feet"""
@@ -76,17 +114,35 @@ class Player(Entity):
             # we where facing when moving
             action = IDLE
 
+        if self.attacking():
+            action = ATTACK
+
         self.sprite = self.animations[action, self.direction]
 
     def logic(self, game):
         super().logic(game)
 
+        self.attack(game)
+        self.move(game)
+
+        self.set_sprite()
+        self.foot_particles(game)
+
+
+    def move(self, game):
         inputs = pygame.key.get_pressed()
 
         speed_x = inputs[pygame.K_RIGHT] - inputs[pygame.K_LEFT]
         speed_y = inputs[pygame.K_DOWN] - inputs[pygame.K_UP]
 
-        self.vel = (self.vel + Vec(speed_x, speed_y) * self.SPEED) / 2
+
+        dir = Vec(speed_x, speed_y)
+        if speed_x or speed_y:
+            dir.scale_to_length(self.SPEED)
+
+        self.vel = (self.vel + dir * (1 + 2*self.attacking())) / 2
+
+
         self.pos += self.vel
 
         # We clamp the position to the screen
@@ -94,13 +150,29 @@ class Player(Entity):
             self.pos.x = game.camera.scroll
             self.vel.x = 0
 
-        self.set_sprite()
+    def key_down(self, event):
+        if event.key == pygame.K_SPACE:
+            # Attack
+            if self.attack_cool_down <= 0:
+                self.attack_cool_down = ATTACK_COOL_DOWN
+                self.attack_duration = ATTACK_LENGTH
 
+    def attack(self, game):
+        self.attack_cool_down -= 1
+        self.attack_duration -= 1
+
+
+
+    def foot_particles(self, game):
         if self.walking():
             self.foot_step_particle_delay -= 1
-        if self.foot_step_particle_delay <= 0:
+
+        # if self.foot_step_particle_delay <= 0:
+        if random() < self.vel.length_squared() / (self.SPEED ** 2 * 6):
+
             self.foot_step_particle_delay = randrange(3, 8)
-            a = gauss(angle(self.vel) + pi, 0.3)
+
+            a = gauss(angle(self.vel) + pi, 0.5)
             s = gauss(0.5, 0.1)
 
             game.particles.add( Particle(
@@ -111,6 +183,4 @@ class Player(Entity):
                 size=randrange(1, 3),
                 color=0x995544
             ) )
-
-
 
