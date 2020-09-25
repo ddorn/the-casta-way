@@ -15,6 +15,7 @@ class Entity:
         self.size = size
         self.vel = Vec()
         self.sprite = sprite or BaseSprite()
+        self.alive = True
 
 
     def draw(self, display, prop):
@@ -25,5 +26,5 @@ class Entity:
         # One pixel with rect by default
         # pygame.draw.rect(display, self.DEFAULT_COLOR, (pos, self.size), 1)
 
-    def logic(self):
+    def logic(self, game):
         self.sprite.logic()

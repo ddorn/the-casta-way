@@ -1,6 +1,7 @@
 import pygame
 
 from src.constants import Files
+from src.entities.particles import ParticleSystem
 from src.entities.player import Player
 from src.window import State
 
@@ -13,14 +14,18 @@ class GameState(State):
         self.huge_font = pygame.font.Font(str(Files.MAIN_FONT), 64)
 
         self.player = Player()
-        self.entities = [self.player]
+        self.particles = ParticleSystem()
+        self.entities = [self.particles, self.player]
 
     def logic(self):
         self.score += 1
 
         # Update each entity
-        for entity in self.entities:
-            entity.logic()
+        for entity in self.entities[:]:
+            entity.logic(self)
+
+            if not entity.alive:
+                self.entities.remove(entity)
 
         return self
 

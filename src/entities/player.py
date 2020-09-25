@@ -1,11 +1,16 @@
+from math import pi
+from random import random, gauss, randrange
+
 import pygame
 from pygame import Vector2 as Vec
 
 from src.animation import Animation, SpriteCompo, Sprite
 from src.constants import Files
-from src.entities import Entity
+from src.entities import Entity, Particle
 
 # Directions
+from src.utils import angle
+
 RIGHT = "right"
 DOWN = "down"
 LEFT = "left"
@@ -39,6 +44,16 @@ class Player(Entity):
 
         self.direction = DOWN
 
+        self.foot_step_particle_delay = 0
+
+    def walking(self):
+        """Whether the player is walking."""
+        return self.vel.length_squared() > 1
+
+    def feet(self):
+        """Return the position of the feet"""
+        return self.pos + (5, 14)
+
     def get_direction(self, vel: Vec):
         if vel.x > 0.5:
             return RIGHT
@@ -53,7 +68,7 @@ class Player(Entity):
 
     def set_sprite(self):
 
-        if self.vel.length_squared() > 1:
+        if self.walking():
             action = WALK
             self.direction = self.get_direction(self.vel)
         else:
@@ -63,8 +78,8 @@ class Player(Entity):
 
         self.sprite = self.animations[action, self.direction]
 
-    def logic(self):
-        super().logic()
+    def logic(self, game):
+        super().logic(game)
 
         inputs = pygame.key.get_pressed()
 
@@ -75,6 +90,22 @@ class Player(Entity):
         self.pos += self.vel
 
         self.set_sprite()
+
+        if self.walking():
+            self.foot_step_particle_delay -= 1
+        if self.foot_step_particle_delay <= 0:
+            self.foot_step_particle_delay = randrange(3, 8)
+            a = gauss(angle(self.vel) + pi, 0.3)
+            s = gauss(0.5, 0.1)
+
+            game.particles.add( Particle(
+                self.feet(),
+                speed=s,
+                angle=a,
+                friction=0.05,
+                size=randrange(1, 3),
+                color=0x995544
+            ) )
 
 
 
