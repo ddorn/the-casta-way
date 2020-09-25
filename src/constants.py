@@ -2,6 +2,7 @@ from pathlib import Path
 
 FPS = 60
 GAME_SIZE = (400, 300)
+INF = float('inf')
 
 class Files:
     # Directories

@@ -12,7 +12,7 @@ class BaseSprite:
         pass
 
 class Sprite(BaseSprite):
-    def __init__(self, surf, offset):
+    def __init__(self, surf, offset=(0, 0)):
         self.surf = surf
         self.offset = Vec(offset)
 

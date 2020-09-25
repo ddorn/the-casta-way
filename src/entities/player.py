@@ -30,7 +30,7 @@ SPEED = 2
 
 ANIMS = {
     (ATTACK, LEFT): [(-3, -2), 16, 1],
-    (ATTACK, RIGHT): [(-3, -2), 16, 1],
+    (ATTACK, RIGHT): [(-2, -2), 16, 1],
     (ATTACK, UP): [(-10, -2), 23, 1],
     (ATTACK, DOWN): [(-3, -2), 23, 1],
 
@@ -52,6 +52,8 @@ class Player(Entity):
     DEFAULT_COLOR = 0xff0000
     SPEED = 3  # Pixels per seconds
     SHADOW_SIZE = (14, 6)
+    SOLID = True
+    MASS = 1.0
 
     def __init__(self):
         super().__init__((25, 150), (10, 16))
@@ -116,6 +118,10 @@ class Player(Entity):
 
         if self.attacking():
             action = ATTACK
+            # Here we need to coordinate more, because if
+            # The animation starts at the 3rd frame because it
+            # was not reset, it looks weird
+            self.animations[action, self.direction].sprite_index = 5 - self.attack_duration // ANIMS[ATTACK, LEFT][SPEED]
 
         self.sprite = self.animations[action, self.direction]
 
@@ -142,13 +148,10 @@ class Player(Entity):
 
         self.vel = (self.vel + dir * (1 + 2*self.attacking())) / 2
 
-
-        self.pos += self.vel
-
         # We clamp the position to the screen
-        if self.pos.x < game.camera.scroll:
-            self.pos.x = game.camera.scroll
-            self.vel.x = 0
+        # if self.pos.x < game.camera.scroll:
+        #     self.pos.x = game.camera.scroll
+        #     self.vel.x = 0
 
     def key_down(self, event):
         if event.key == pygame.K_SPACE:
@@ -160,6 +163,10 @@ class Player(Entity):
     def attack(self, game):
         self.attack_cool_down -= 1
         self.attack_duration -= 1
+
+        if self.attacking():
+            # Check for enemies...
+            ...
 
 
 
