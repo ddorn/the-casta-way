@@ -8,6 +8,7 @@ from pygame import Vector2 as Vec
 from src.animation import Animation, SpriteCompo, Sprite
 from src.constants import Files
 from src.entities import Entity, Particle
+from src.entities.decor import Beer
 
 # Directions
 from src.utils import angle
@@ -48,20 +49,23 @@ ANIMS = {
 ATTACK_LENGTH = ANIMS[ATTACK, LEFT][SPEED] * 6
 ATTACK_COOL_DOWN = 3 + ATTACK_LENGTH
 
+
 class Player(Entity):
     DEFAULT_COLOR = 0xff0000
     SPEED = 3  # Pixels per seconds
     SHADOW_SIZE = (14, 6)
     SOLID = True
     MASS = 1.0
+    MAX_LIFE = 100
+    BEER_LIFE = 10
 
     def __init__(self):
-        super().__init__((25, 150), (10, 16))
+        super().__init__((50, 150), (10, 10))
 
 
         shadow = pygame.Surface(self.SHADOW_SIZE, pygame.SRCALPHA)
         pygame.draw.ellipse(shadow, (0, 0, 0, 100), ((0, 0), self.SHADOW_SIZE))
-        shadow = Sprite(shadow, (-2, 12))
+        shadow = Sprite(shadow, (-2, 6))
 
         self.animations = {
             (action, direction): SpriteCompo(
@@ -70,7 +74,7 @@ class Player(Entity):
                     Files.IMAGES / f"{action}_{direction}.png",
                     width,
                     frame_duration=speed,
-                    offset=offset,
+                    offset=offset + Vec(0, -6),
                 )
             )
             for ((action, direction), (offset, width, speed)) in ANIMS.items()
@@ -82,6 +86,7 @@ class Player(Entity):
         self.attack_cool_down = 0
 
         self.foot_step_particle_delay = 0
+        self.life = self.MAX_LIFE
 
     def walking(self):
         """Whether the player is walking."""
@@ -128,6 +133,10 @@ class Player(Entity):
     def logic(self, game):
         super().logic(game)
 
+        self.life -= 0.2
+        if self.life < 0:
+            self.alive = False
+
         self.attack(game)
         self.move(game)
 
@@ -168,7 +177,12 @@ class Player(Entity):
             # Check for enemies...
             ...
 
-
+    def on_collision(self, other):
+        if isinstance(other, Beer):
+            other.alive = False
+            self.life = min(self.life + self.BEER_LIFE, self.MAX_LIFE)
+        else:
+            print(other)
 
     def foot_particles(self, game):
         if self.walking():

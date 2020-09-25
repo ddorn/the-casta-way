@@ -3,12 +3,14 @@ from math import sqrt
 
 class Camera:
     SCROLL_TRIGGER = 200
+    DOUBLE_SPEED_DELAY = 600
 
     def __init__(self, parallax=0.1):
         self.scroll = 0
         self.parallax = parallax
 
     def to_screen(self, vec, layer=0):
+        layer = 0
         x, y = vec
 
         x -= self.scroll * (1 + layer * self.parallax)
@@ -18,7 +20,7 @@ class Camera:
         return (x, y)
 
     def logic(self, game):
-        self.scroll += 1
+        self.scroll += 1 + sqrt(game.score / self.DOUBLE_SPEED_DELAY)
         screen_pos = self.to_screen(game.player.pos)
 
         if screen_pos[0] > self.SCROLL_TRIGGER and game.player.vel.x > 1:

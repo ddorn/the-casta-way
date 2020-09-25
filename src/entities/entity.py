@@ -31,10 +31,13 @@ class Entity:
         self.sprite.draw(display, screen_pos)
 
         # One pixel with rect by default
-        pygame.draw.rect(display, self.DEFAULT_COLOR, (screen_pos, self.size), 1)
+        # pygame.draw.rect(display, self.DEFAULT_COLOR, (screen_pos, self.size), 1)
 
     def logic(self, game):
         self.sprite.logic()
+
+        if game.camera.to_screen(self.pos)[0] < -50:
+            self.alive = False
 
 
     def can_collide(self, other):
@@ -53,6 +56,9 @@ class Entity:
     def collide(self, other):
         return Rect(self.pos, self.size).colliderect((other.pos, other.size))
 
+    def on_collision(self, other):
+        pass
+
     def solve_collision_x(self, other: "Entity"):
 
         # Don't do collisions if one object is not solde
@@ -69,6 +75,9 @@ class Entity:
                 self.pos.x = other.pos.x - self.size[0]
             elif self.vel.x < 0:
                 self.pos.x = other.pos.x + other.size[0]
+
+            self.on_collision(other)
+            other.on_collision(self)
             #
             # coeff1 = other.MASS / (self.MASS + other.MASS) if other.MASS != INF else 0
             # coeff2 = self.MASS / (self.MASS + other.MASS) if self.MASS != INF else 0
@@ -89,3 +98,5 @@ class Entity:
             elif self.vel.y < 0:
                 self.pos.y = other.pos.y + other.size[1]
 
+            self.on_collision(other)
+            other.on_collision(self)

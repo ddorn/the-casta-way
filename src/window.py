@@ -27,6 +27,8 @@ class State:
     def key_down(self, event):
         pass
 
+    def mouse_button(self, event):
+        pass
 
 
 class Window:
@@ -98,4 +100,6 @@ class Window:
                 self.set_display(event.size)
             elif event.type == pygame.KEYDOWN:
                 self.state.key_down(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.state.mouse_button(event)
 

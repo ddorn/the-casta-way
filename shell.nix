@@ -3,7 +3,7 @@ with pkgs;
 let 
   pythonEnv = pkgs.poetry2nix.mkPoetryEnv {
     projectDir = ./.;
-    overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {
+    overrides = pkgs.poetry2nix.overrides.withDefaults (cls: super: {
       pygame = super.pygame.overridePythonAttrs (old: rec {
         nativeBuildInputs = with pkgs; [
           pkg-config SDL
