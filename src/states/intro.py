@@ -18,6 +18,10 @@ class IntroState(State):
         if not DEBUG_STORY:
             get_sound('intro').play()
 
+    def key_down(self, event):
+        if event.key == pygame.K_SPACE:
+            self.duration = 0
+
     def get_title_surf(self):
         font = pygame.font.Font(str(Files.MAIN_FONT), 32)
         text = font.render("The Casta Way", True, self.TEXT_COLOR, self.BG_COLOR)
