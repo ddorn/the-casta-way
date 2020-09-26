@@ -1,4 +1,5 @@
 import pygame
+from requests import get as fetch
 
 from src.constants import Files, WHITE, BACKGROUND, GOLD
 from src.utils import draw_text, colored_text
@@ -9,11 +10,16 @@ class Leaderboard(State):
     BG_COLOR = BACKGROUND
     SCORE_COLOR = GOLD
 
-    def __init__(self, score, name='Bg Timide'):
+    def __init__(self, score, name):
         self.restart = False
         self.time = 0
-        self.player_score = score
-        self.player_name = name
+        id = self.put_score(
+            name,
+            score,
+            score
+        )
+        self.scores = self.get_scores()
+        self.current_score = next(filter(lambda score: score.id == id, self.scores))
 
     def logic(self):
         self.time += 1
@@ -37,15 +43,14 @@ class Leaderboard(State):
         leaderboard_title_rect.centerx = display.get_rect().centerx
         display.blit(leaderboard_title, leaderboard_title_rect)
 
+        is_top_8 = self.current_score.rank <= 8
         i = 0
-        for i, score in enumerate(self.get_scores()):
+
+        for i, score in enumerate(self.scores[:7 + is_top_8]):
             self.print_score(display, score, i)
 
-        self.print_score(
-            display,
-            (self.player_name, self.player_score, 422),
-             i + 1
-        )
+        if not is_top_8:
+            self.print_score(display, self.current_score, i + 1)
 
         if self.time % 40 > 24:
             restart_text = draw_text('Press R to restart', WHITE, size=16)
@@ -59,12 +64,13 @@ class Leaderboard(State):
         title = font.render(str(text), True, color, self.BG_COLOR)
         return title
 
-    def print_score(self, display, info, i):
-        name, score, rank = info
+    def print_score(self, display, score, i):
         list_item = colored_text(
-            (rank + 1, GOLD),
-            (f". {name} (", WHITE),
-            (score, (255, 60, 120)),
+            (score.rank, GOLD),
+            (". ", WHITE),
+            (score.name, (255, 30, 42) if self.current_score.id == score.id else WHITE),
+            (" (", WHITE),
+            (score.score, (255, 60, 120)),
             (")", WHITE),
             size=16
         )
@@ -75,13 +81,22 @@ class Leaderboard(State):
         display.blit(list_item, list_item_rect)
 
     def get_scores(self):
-        return [
-            ('John', 2048, 0),
-            ('Gerard Depardieu', 17, 1),
-            ('Leo', 17, 2),
-            ('Felix Dorn', 17, 3),
-            ('John Doez TheONE +', 17, 4),
-            ('John', 14, 5),
-            ('John', 14, 6),
+        scores = fetch('https://g7snanhwe2bmhhg2fozjnmhz1e9.felixdorn.fr/api/leaderboard').json()
 
+        print(scores)
+        return [
+            Score(**d, rank=rank + 1)
+            for rank, d in enumerate(scores)
         ]
+
+    def put_score(self, name, hash, score):
+        return fetch('https://g7snanhwe2bmhhg2fozjnmhz1e9.felixdorn.fr/api/new-score',
+                     params={"name": name, 'hash': hash, 'score': score}).json()['id']
+
+
+class Score:
+    def __init__(self, id, name, score, rank):
+        self.id = id
+        self.name = name
+        self.score = score
+        self.rank = rank
