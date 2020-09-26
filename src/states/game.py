@@ -3,6 +3,7 @@ from random import randrange, uniform, random, choice
 
 import pygame
 from pygame import Vector2 as Vec
+from pygame import Rect
 
 from src.camera import Camera
 from src.constants import Files, GAME_SIZE
@@ -33,6 +34,7 @@ class GameState(State):
         self.health_bar = load_cached_image(Files.IMAGES / "health_bar.png")
 
         self.structures = self.load_structures()
+        self.struct_rects = []
 
         self.generate_trees()
         self.generate_border()
@@ -114,9 +116,13 @@ class GameState(State):
         if random() < 0.01:
             s = choice(self.structures)
             y = randrange(75, 275 - s.height)
-            self.entities.extend(
-                s.spawn(Vec(right, y))
-            )
+            rect = Rect(right, y, s.width, s.height)
+
+            if not any(r.colliderect(rect) for r in self.struct_rects):
+                self.struct_rects.append(rect)
+                self.entities.extend(
+                    s.spawn(Vec(right, y))
+                )
 
         if random() < 0.04:
             self.entities.append(Beer(

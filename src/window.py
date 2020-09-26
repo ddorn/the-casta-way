@@ -105,5 +105,6 @@ class Window:
                 self.state.key_down(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = (Vec(event.pos) - self.view_port.topleft) // self.scale
-                self.state.mouse_button(tuple(pos), event.button)
+                if Rect((0, 0), GAME_SIZE).collidepoint(pos):
+                    self.state.mouse_button(tuple(pos), event.button)
 

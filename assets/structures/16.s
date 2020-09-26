@@ -1,1 +1,1 @@
-{"name": "16", "objs": [{"type": "Bush", "pos": [360.0, 0.0]}, {"type": "Bush", "pos": [360.0, 15.0]}, {"type": "Bush", "pos": [360.0, 30.0]}, {"type": "Beer", "pos": [380.0, 20.0]}, {"type": "Rock", "pos": [0.0, 120.0]}]}
+{"name": "16", "objs": [{"type": "Bush", "pos": [0.0, 0.0]}, {"type": "Bush", "pos": [0.0, 15.0]}, {"type": "Bush", "pos": [0.0, 30.0]}, {"type": "Beer", "pos": [20.0, 20.0]}]}

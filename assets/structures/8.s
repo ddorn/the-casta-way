@@ -1,1 +1,0 @@
-{"name": "bounce2beer", "objs": [{"type": "Beer", "pos": [357.0, 12.0]}, {"type": "Beer", "pos": [357.0, 2.0]}, {"type": "Beer", "pos": [375.0, 37.0]}, {"type": "Rock", "pos": [0.0, 135.0]}, {"type": "Bounce", "pos": [360.0, 0.0]}, {"type": "Beer", "pos": [350.0, 5.0]}]}

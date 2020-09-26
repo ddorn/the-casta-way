@@ -86,11 +86,11 @@ class Structure:
 
     @property
     def width(self):
-        return max(e.pos[0] for e in self.elts) - min(e.pos[0] for e in self.elts)
+        return max(e.pos[0] for e in self.elts) # - min(e.pos[0] for e in self.elts)
 
     @property
     def height(self):
-        return max(e.pos[1] for e in self.elts) - min(e.pos[1] for e in self.elts)
+        return max(e.pos[1] for e in self.elts) # - min(e.pos[1] for e in self.elts)
 
 
 
