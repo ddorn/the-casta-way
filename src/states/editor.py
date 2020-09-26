@@ -8,7 +8,7 @@ from src.camera import Camera
 from src.constants import GAME_SIZE, WHITE
 from src.entities.decor import Rock, Beer, Trunk, Boost
 from src.structures import Structure, Elt, OBJECTS
-from src.utils import draw_text
+from src.utils import draw_text, colored_text
 from src.window import State
 
 
@@ -56,12 +56,15 @@ class EditorState(State):
             self.brush -= 1
         elif event.key == pygame.K_RIGHT:
             self.brush += 1
-        elif event.key == pygame.K_DELETE:
+        elif event.key == pygame.K_r:
             self.elts = {}
+            self.elts_grid = {}
         elif event.key == pygame.K_g:
             self.clip_to_grid = not self.clip_to_grid
         elif event.key == pygame.K_s:
             self.save()
+        elif event.key == pygame.K_a:
+            self.scroll()
 
         self.brush %= len(self.brushes)
 
@@ -112,7 +115,36 @@ class EditorState(State):
             o(pos).draw(display, self.camera, prop)
             display.blit(label, pos + Vec(4, 15))
 
+        help = """R: reset
+        S: save
+        A: scroll
+        G: grid"""
+
+        y = 0
+        for l in help.splitlines():
+            l = l.strip()
+            c = l[0]
+            text = l[1:]
+            s = colored_text(
+                (c, (255, 165, 0)),
+                (text, WHITE),
+                size=16,
+            )
+            r = s.get_rect()
+            r.topright = (400, y)
+            y += r.height
+            display.blit(s, r)
         return self
+
+    def scroll(self):
+        self.elts = {
+            tuple(pos + Vec(self.GRID_SIZE, self.GRID_SIZE)): e
+            for pos, e in self.elts.items()
+        }
+        self.elts_grid = {
+            tuple(pos + Vec(1, 1)): e
+            for pos, e in self.elts_grid.items()
+        }
 
     def grid_pos(self, pos, e):
         pos = Vec(pos) * self.GRID_SIZE
