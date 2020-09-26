@@ -52,13 +52,16 @@ class GameState(State):
 
     def generate_trees(self):
         # Generate trees
-        for i in range(24):
-            pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(290, 330))
-
+        x1 = 0
+        x2 = 0
+        for i in range(30):
+            x1 += randrange(10, 30)
+            pos = (x1, randrange(290, 330))
             layer = (pos[1] - 280) / 20 + 1
             self.entities.append(Tree(pos, layer))
-        for i in range(24):
-            pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(12, 60))
+
+            x2 += randrange(10, 30)
+            pos = (x2, randrange(12, 60))
             layer = (pos[1]) / 75
             self.entities.append(Tree(pos, layer))
 
@@ -132,7 +135,7 @@ class GameState(State):
         if random() < 0.04:
             s = choice(self.structures)
             y = randrange(75, 275 - s.height)
-            rect = Rect(right, y, s.width + 15, s.height + 15)
+            rect = Rect(right, y, s.width + 20, s.height + 20)
 
             if not any(r.colliderect(rect) for r in self.struct_rects):
                 self.struct_rects.append(rect)

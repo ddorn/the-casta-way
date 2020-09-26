@@ -56,15 +56,15 @@ class Player(Entity):
     MASS = 1.0
     MAX_LIFE = 100
     BEER_LIFE = 10
-    KNOCKBACK_RESIST = 0.7
+    KNOCKBACK_RESIST = 0.6
 
     def __init__(self):
-        super().__init__((50, 150), (10, 10))
+        super().__init__((50, 150), (10, 8))
 
 
         shadow = pygame.Surface(self.SHADOW_SIZE, pygame.SRCALPHA)
         pygame.draw.ellipse(shadow, (0, 0, 0, 100), ((0, 0), self.SHADOW_SIZE))
-        shadow = Sprite(shadow, (-2, 6))
+        shadow = Sprite(shadow, (-2, 4))
 
         self.animations = {
             (action, direction): SpriteCompo(
@@ -73,7 +73,7 @@ class Player(Entity):
                     Files.IMAGES / f"{action}_{direction}.png",
                     width,
                     frame_duration=speed,
-                    offset=offset + Vec(0, -6),
+                    offset=offset + Vec(0, -8),
                 )
             )
             for ((action, direction), (offset, width, speed)) in ANIMS.items()
@@ -99,7 +99,7 @@ class Player(Entity):
 
     def feet(self):
         """Return the position of the feet"""
-        return self.pos + (5, 14)
+        return self.pos + (5, 8)
 
     def get_direction(self, vel: Vec):
         if vel.x > 0.5:

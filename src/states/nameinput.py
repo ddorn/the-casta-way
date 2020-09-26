@@ -34,6 +34,8 @@ class NameInputState(State):
             if l in string.ascii_letters + string.digits + " -_<>":
                 self.name += l
 
+        self.name = self.name[:24]
+
     def cursor_color(self):
         if self.time % 20 < 16:
             return GOLD

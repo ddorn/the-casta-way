@@ -79,7 +79,7 @@ class Structure:
         ]
 
         if DEBUG_STRUCT:
-            entities.append(Text(pos, self.name))
+            entities.append(Text(pos - Vec(1, 1), self.name))
 
         return entities
 

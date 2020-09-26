@@ -59,7 +59,7 @@ class Fence(Entity):
 
 class Bounce(Entity):
     SOLID = True
-    KNOCKBACK = 16
+    KNOCKBACK = 14
 
     def __init__(self, pos):
         bounce = Animation.from_sheet(Files.IMAGES / "bounce.png", 19, 3, (-2, -2))
@@ -70,7 +70,8 @@ class Bounce(Entity):
 
 
 class Boost(Entity):
-    KNOCKBACK = 20
+    SOLID = False
+    KNOCKBACK = 16
 
     def __init__(self, pos):
         boost = Sprite(load_cached_image(Files.IMAGES / "boost.png"))
@@ -83,4 +84,5 @@ class Boost(Entity):
 class Text(Entity):
     def __init__(self, pos, text):
         s = get_font(16).render(text, True, WHITE, BACKGROUND)
+        s.set_alpha(100)
         super(Text, self).__init__(pos, s.get_size(), Sprite(s))
