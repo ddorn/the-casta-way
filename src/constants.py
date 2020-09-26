@@ -16,7 +16,7 @@ class Files:
     # Directories
     ROOT = Path(__file__).parent.parent
     ASSETS = ROOT / "assets"
-    SOUND = ASSETS / "sound"
+    SOUNDS = ASSETS / "sounds"
     IMAGES = ASSETS / "images"
     FONTS = ASSETS / "fonts"
     STRUCTURES = ASSETS / "structures"

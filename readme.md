@@ -18,4 +18,4 @@ Side note : There are four goats hidden in this text ^^
 
 - sprites: https://vryell.itch.io/tiny-adventure-pack
 - some sfx : https://kronbits.itch.io/freesfx
-- soundtrack: https://trgbanks.bandcamp.com/album/trg-banks-christmas-album
+- soundtrack: https://audionautix.com/

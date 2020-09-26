@@ -8,7 +8,7 @@ from pygame import Rect
 from src.camera import Camera
 from src.constants import Files, GAME_SIZE
 from src.entities import Particle
-from src.entities.decor import Tree, Rock, Beer, Fence
+from src.entities.decor import Tree, Beer, Fence
 from src.entities.particles import ParticleSystem
 from src.entities.player import Player
 from src.states.gameover import GameOver
@@ -38,6 +38,10 @@ class GameState(State):
 
         self.generate_trees()
         self.generate_border()
+
+        pygame.mixer.music.load(str(Files.SOUNDS / 'soundtrack.ogg'))
+        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.play(-1)
 
     def load_structures(self):
         structures = []
@@ -77,6 +81,7 @@ class GameState(State):
         self.physics()
 
         if not self.player.alive:
+            pygame.mixer.music.fadeout(500)
             return GameOver(self.score)
         return self
 
