@@ -54,7 +54,7 @@ class GameState(State):
 
     @property
     def score(self):
-        return 100000 + int(self.camera.scroll + self.player.bonus)
+        return int(self.camera.scroll + self.player.bonus)
 
     def generate_trees(self):
         # Generate trees

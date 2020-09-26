@@ -8,7 +8,7 @@ class TheEndState(State):
     TEXT_COLOR = (240, 240, 240)
 
     def __init__(self, leaderboard):
-        self.duration = 30 * 4  # Ten seconds
+        self.duration = 30 * 4  # Four seconds
         self.leaderboard = leaderboard
         pass
 
