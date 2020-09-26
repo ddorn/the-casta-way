@@ -23,7 +23,7 @@ class GameState(State):
     ROAD_COLOR = 0xfecb20
 
     def __init__(self):
-        self.huge_font = pygame.font.Font(str(Files.MAIN_FONT), 64)
+        self.score_font = self.huge_font = pygame.font.Font(str(Files.MAIN_FONT), 64)
 
         self.camera = Camera()
 
@@ -118,11 +118,12 @@ class GameState(State):
             entity.draw(display, self.camera, prop)
 
         # Draw the score
-        score_surf = self.huge_font.render("{:04}".format(self.score), False, (240, 240, 240), self.BG_COLOR)
-        rect = score_surf.get_rect()
-        # rect.top = -10
-        rect.centerx = 200
-        display.blit(score_surf, rect)
+        for i, char in enumerate("{:04}".format(self.score)):
+            score_surf = self.huge_font.render(char, False, (240, 240, 240), self.BG_COLOR)
+            rect = score_surf.get_rect()
+            rect.top = -10
+            rect.centerx = 150 + (i * 32)
+            display.blit(score_surf, rect)
 
         self.draw_health_bar(display)
 
