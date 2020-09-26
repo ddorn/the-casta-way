@@ -18,6 +18,8 @@ class Files:
     IMAGES = ASSETS / "images"
     FONTS = ASSETS / "fonts"
     STRUCTURES = ASSETS / "structures"
+    DATA = ROOT / "data"
 
     # Files
     MAIN_FONT = FONTS / "ThaleahFat.ttf"
+    NAME = DATA / "name"
