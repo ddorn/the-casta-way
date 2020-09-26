@@ -13,7 +13,8 @@ class NameInputState(State):
     def __init__(self, score):
         # We need the score to pass it to the next State
         self.score = score
-        self.name = Files.NAME.read_text()
+        Files.NAME.touch()
+        self.name = Files.NAME.read_text() or "Cool kid"
         self.time = 0
         self.done = False
 
