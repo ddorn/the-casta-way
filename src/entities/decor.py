@@ -1,9 +1,9 @@
 from pygame import Vector2 as Vec
 
 from src.animation import Sprite, Animation
-from src.constants import Files, GAME_SIZE
+from src.constants import Files, GAME_SIZE, WHITE, BACKGROUND
 from src.entities import Entity
-from src.utils import load_cached_image
+from src.utils import load_cached_image, get_font
 
 
 class Tree(Entity):
@@ -67,3 +67,20 @@ class Bounce(Entity):
 
     def on_collision(self, player, dir):
         player.knock_back = -dir.normalize() * self.KNOCKBACK
+
+
+class Boost(Entity):
+    KNOCKBACK = 20
+
+    def __init__(self, pos):
+        boost = Sprite(load_cached_image(Files.IMAGES / "boost.png"))
+        super().__init__(pos, (13, 13), boost)
+
+    def on_collision(self, player, dir):
+        player.knock_back = Vec(1, 0) * self.KNOCKBACK
+
+
+class Text(Entity):
+    def __init__(self, pos, text):
+        s = get_font(16).render(text, True, WHITE, BACKGROUND)
+        super(Text, self).__init__(pos, s.get_size(), Sprite(s))

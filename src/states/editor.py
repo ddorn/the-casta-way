@@ -6,7 +6,7 @@ import pygame.gfxdraw
 
 from src.camera import Camera
 from src.constants import GAME_SIZE
-from src.entities.decor import Rock, Beer, Trunk
+from src.entities.decor import Rock, Beer, Trunk, Boost
 from src.structures import Structure, Elt, OBJECTS
 from src.window import State
 
@@ -105,6 +105,8 @@ class EditorState(State):
         pos = Vec(pos) * self.GRID_SIZE
         if e == Beer:
             pos += (5, 5)
+        elif e == Boost:
+            pos += (2, 2)
 
         return pos
 

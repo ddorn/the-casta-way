@@ -5,11 +5,11 @@ from typing import List
 
 from pygame import Vector2 as Vec
 
-from src.constants import Files
+from src.constants import Files, DEBUG_STRUCT
 from src.entities import Entity
-from src.entities.decor import Rock, Beer, Trunk, Bush, Bounce
+from src.entities.decor import Rock, Beer, Trunk, Bush, Bounce, Boost, Text
 
-OBJECTS = [Rock, Beer, Trunk, Bush, Bounce]
+OBJECTS = [Rock, Beer, Trunk, Bush, Bounce, Boost]
 """Collection of objects in structures."""
 
 @dataclass
@@ -73,10 +73,15 @@ class Structure:
         return struct
 
     def spawn(self, pos) -> List[Entity]:
-        return [
+        entities = [
             e.spawn(pos)
             for e in self.elts
         ]
+
+        if DEBUG_STRUCT:
+            entities.append(Text(pos, self.name))
+
+        return entities
 
 
     @property
