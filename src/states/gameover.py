@@ -2,6 +2,7 @@ import pygame
 from pygame import Vector2 as Vec
 
 from src.constants import Files, WHITE
+from src.states.leaderboard import Leaderboard
 from src.window import State
 
 
@@ -12,6 +13,7 @@ class GameOver(State):
 
     def __init__(self, score):
         self.duration = 60  # two seconds
+        self.player_score = score
         self.text = self.get_title('Game Over', self.GAME_OVER_COLOR)
         self.score_label = self.get_title('Score: ')
         self.score = self.get_title(score, self.SCORE_COLOR)
@@ -20,8 +22,7 @@ class GameOver(State):
         self.duration -= 1
 
         if self.duration <= 0:
-            from src.states import GameState
-            return GameState()
+            return Leaderboard(self.player_score)
         else:
             return self
 
