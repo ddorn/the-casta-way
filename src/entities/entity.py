@@ -12,6 +12,7 @@ class Entity:
     DEFAULT_COLOR = 0xaabbdd
     SOLID = False
     MASS = float('inf')
+    OFFSET = (0, 0)
 
     def __init__(self, pos, size, sprite: BaseSprite = None, layer=0):
         self.pos = Vec(pos)

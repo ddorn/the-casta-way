@@ -1,4 +1,5 @@
 import sys
+import click
 
 import pygame
 
@@ -8,11 +9,13 @@ from src.window import Window
 
 
 
-def the_casta_way():
+@click.command()
+@click.option("--editor")
+def the_casta_way(editor):
     pygame.init()
 
-    if "--editor" in sys.argv:
-        return Window(EditorState).run()
+    if editor:
+        return Window(lambda: EditorState(editor)).run()
     else:
         # game = Window(IntroState())
         game = Window(GameState)

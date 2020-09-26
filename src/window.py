@@ -27,7 +27,7 @@ class State:
     def key_down(self, event):
         pass
 
-    def mouse_button(self, event):
+    def mouse_button(self, pos, button):
         pass
 
 
@@ -57,6 +57,10 @@ class Window:
         self.logic_clock = Clock(self.LOGIC_FPS)
         self.render_clock = Clock(self.FPS)
 
+    @property
+    def scale(self):
+        return min(self.real_size.x // self.SIZE.x, self.real_size.y // self.SIZE.y)
+
     def set_display(self, size=None):
         """Setup the display to a given size."""
         self.real_size = Vec(size or self.real_size)
@@ -64,8 +68,7 @@ class Window:
         self.real_display.fill(self.BORDER_COLOR)
 
         # We find the viewport so we have black border if the ratio do not match
-        scale = min(self.real_size.x // self.SIZE.x, self.real_size.y // self.SIZE.y)
-        area = self.SIZE * scale
+        area = self.SIZE * self.scale
         rect = Rect((self.real_size - area) / 2, area)
 
         self.view_port = rect
@@ -101,5 +104,6 @@ class Window:
             elif event.type == pygame.KEYDOWN:
                 self.state.key_down(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.state.mouse_button(event)
+                pos = (Vec(event.pos) - self.view_port.topleft) // self.scale
+                self.state.mouse_button(tuple(pos), event.button)
 
