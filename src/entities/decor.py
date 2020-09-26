@@ -78,15 +78,24 @@ class Bounce(Entity):
 class Boost(Entity):
     SOLID = False
     KNOCKBACK = 16
+    IMAGE = "boost.png"
+    DIR = (1, 0)
 
     def __init__(self, pos):
-        boost = Sprite(load_cached_image(Files.IMAGES / "boost.png"))
+        boost = Sprite(load_cached_image(Files.IMAGES / self.IMAGE))
         super().__init__(pos, (13, 13), boost)
 
     def on_collision(self, player, dir):
-        player.knock_back = Vec(1, 0) * self.KNOCKBACK
+        player.knock_back =  Vec(self.DIR) * self.KNOCKBACK
         get_sound("boost").play()
 
+class BoostUp(Boost):
+    DIR = (0, -1)
+    IMAGE = "boost_up.png"
+
+class BoostDown(Boost):
+    DIR = (0, 1)
+    IMAGE = "boost_down.png"
 
 class Text(Entity):
     def __init__(self, pos, text):

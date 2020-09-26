@@ -5,9 +5,10 @@ from pygame import Vector2 as Vec
 import pygame.gfxdraw
 
 from src.camera import Camera
-from src.constants import GAME_SIZE
+from src.constants import GAME_SIZE, WHITE
 from src.entities.decor import Rock, Beer, Trunk, Boost
 from src.structures import Structure, Elt, OBJECTS
+from src.utils import draw_text
 from src.window import State
 
 
@@ -99,13 +100,19 @@ class EditorState(State):
                 obj = e(self.grid_pos(pos, e))
                 obj.draw(display, self.camera, prop)
 
+        for i, o in enumerate(self.brushes):
+            label = draw_text(str(i), WHITE if i != self.brush else (255, 165, 0), None, 12)
+            pos = (200 + 20 * i, 270)
+            o(pos).draw(display, self.camera, prop)
+            display.blit(label, pos + Vec(4, 15))
+
         return self
 
     def grid_pos(self, pos, e):
         pos = Vec(pos) * self.GRID_SIZE
         if e == Beer:
             pos += (5, 5)
-        elif e == Boost:
+        elif issubclass(e, Boost):
             pos += (2, 2)
 
         return pos
