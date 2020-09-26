@@ -41,6 +41,8 @@ class GameState(State):
 
         self.paused = False
 
+        self.shake = 0
+
         pygame.mixer.music.load(str(Files.SOUNDS / 'soundtrack.ogg'))
         pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
@@ -97,6 +99,11 @@ class GameState(State):
         self.camera.logic(self)
         self.physics()
 
+        self.shake -= 1
+        if self.player.life <= 30:
+            if random() < (30 - self.player.life) / 90:
+                self.shake = 3
+
         if self.paused:
             self.paused = False
             return PauseState(self)
@@ -126,6 +133,9 @@ class GameState(State):
             display.blit(score_surf, rect)
 
         self.draw_health_bar(display)
+
+        if self.shake > 0:
+            display.scroll(randrange(-2, 3), randrange(-2, 3))
 
     def draw_health_bar(self, display):
         prop = self.player.life / self.player.MAX_LIFE * 119
