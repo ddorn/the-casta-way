@@ -2,6 +2,7 @@ import pygame
 
 from src.constants import Files
 from src.states import GameState
+from src.states.story import StoryState
 from src.utils import get_sound
 from src.window import State
 
@@ -25,7 +26,7 @@ class IntroState(State):
         self.duration -= 1
 
         if self.duration <= 0:
-            return GameState()
+            return StoryState()
         else:
             return self
 
