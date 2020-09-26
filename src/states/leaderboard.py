@@ -1,3 +1,5 @@
+from _thread import start_new_thread
+
 import pygame
 from requests import get as fetch
 
@@ -14,15 +16,15 @@ class Leaderboard(State):
     def __init__(self, score, name, hash):
         self.restart = False
         self.time = 0
-        id = self.put_score(
-            name,
-            hash,
-            score
-        )
         self.game_score = score
         self.from_the_end = False
-        self.scores = self.get_scores()
-        self.current_score = next(filter(lambda score: score.id == id, self.scores))
+
+        # Defined by set_scores
+        self.scores = None
+        self.score_id = None
+        self.error_fetch = False
+        start_new_thread(self.set_scores, (name, hash, score))
+
 
     def logic(self):
         self.time += 1
@@ -48,14 +50,27 @@ class Leaderboard(State):
         leaderboard_title_rect.centerx = display.get_rect().centerx
         display.blit(leaderboard_title, leaderboard_title_rect)
 
-        is_top_8 = self.current_score.rank <= 8
-        i = 0
+        if self.error_fetch:
+            text = draw_text("Network error :(", (255, 0, 0))
+            rect = text.get_rect()
+            rect.center = (200, 150)
+            display.blit(text, rect)
+        elif self.scores is None:
+            text = draw_text("loading...")
+            rect = text.get_rect()
+            rect.center = (200, 150)
+            display.blit(text, rect)
+        else:
+            current_score = next(filter(lambda score: score.id == self.score_id, self.scores))
 
-        for i, score in enumerate(self.scores[:7 + is_top_8]):
-            self.print_score(display, score, i)
+            is_top_8 = current_score.rank <= 8
+            i = 0
 
-        if not is_top_8:
-            self.print_score(display, self.current_score, i + 1)
+            for i, score in enumerate(self.scores[:7 + is_top_8]):
+                self.print_score(display, score, i, score.id == current_score.id)
+
+            if not is_top_8:
+                self.print_score(display, current_score, i + 1, True)
 
         if self.time % 40 > 24:
             restart_text = draw_text('Press R to restart', WHITE, size=16)
@@ -69,11 +84,11 @@ class Leaderboard(State):
         title = font.render(str(text), True, color, self.BG_COLOR)
         return title
 
-    def print_score(self, display, score, i):
+    def print_score(self, display, score, i, current=False):
         list_item = colored_text(
             (score.rank, GOLD),
             (". ", WHITE),
-            (score.name, (255, 30, 42) if self.current_score.id == score.id else WHITE),
+            (score.name, (255, 30, 42) if current else WHITE),
             (" (", WHITE),
             (score.score, (255, 60, 120)),
             (")", WHITE),
@@ -85,13 +100,18 @@ class Leaderboard(State):
         list_item_rect.centerx = display.get_rect().centerx
         display.blit(list_item, list_item_rect)
 
-    def get_scores(self):
-        scores = fetch('https://g7snanhwe2bmhhg2fozjnmhz1e9.felixdorn.fr/api/leaderboard').json()
+    def set_scores(self, name, hash, score):
+        try:
+            self.score_id = self.put_score(name, hash, score)
 
-        return [
-            Score(**d, rank=rank + 1)
-            for rank, d in enumerate(scores)
-        ]
+            scores = fetch('https://g7snanhwe2bmhhg2fozjnmhz1e9.felixdorn.fr/api/leaderboard').json()
+
+            self.scores = [
+                Score(**d, rank=rank + 1)
+                for rank, d in enumerate(scores)
+            ]
+        except:
+            self.error_fetch = True
 
     def put_score(self, name, hash, score):
         return fetch('https://g7snanhwe2bmhhg2fozjnmhz1e9.felixdorn.fr/api/new-score',
