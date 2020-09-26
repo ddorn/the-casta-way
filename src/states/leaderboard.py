@@ -83,7 +83,6 @@ class Leaderboard(State):
     def get_scores(self):
         scores = fetch('https://g7snanhwe2bmhhg2fozjnmhz1e9.felixdorn.fr/api/leaderboard').json()
 
-        print(scores)
         return [
             Score(**d, rank=rank + 1)
             for rank, d in enumerate(scores)

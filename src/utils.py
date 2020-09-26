@@ -55,8 +55,11 @@ def draw_text(text, color=WHITE, bg_color=BACKGROUND, size=32, font_path=Files.M
 
 
 @lru_cache(maxsize=100)
-def get_sound(name):
-    return pygame.mixer.Sound((str(Files.SOUNDS / (name + '.wav'))))
+def get_sound(name, volume=1):
+    sound = pygame.mixer.Sound((str(Files.SOUNDS / (name + '.wav'))))
+    sound.set_volume(volume)
+
+    return sound
 
 
 def colored_text(*args, bg=BACKGROUND, size=32, font_path=Files.MAIN_FONT):

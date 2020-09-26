@@ -40,7 +40,7 @@ class GameState(State):
         self.generate_border()
 
         pygame.mixer.music.load(str(Files.SOUNDS / 'soundtrack.ogg'))
-        pygame.mixer.music.set_volume(0.2)
+        pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
 
     def load_structures(self):

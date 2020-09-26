@@ -3,7 +3,6 @@ from random import random, gauss, randrange
 
 import pygame
 from pygame import Vector2 as Vec
-from pygame.mixer import Sound
 
 from src.animation import Animation, SpriteCompo, Sprite
 from src.constants import Files
@@ -85,10 +84,10 @@ class Player(Entity):
         self.attack_duration = -1
         self.attack_cool_down = 0
 
-        self.foot_step_particle_delay = 0
+        self.footstep_particle_delay = 0
         self.life = self.MAX_LIFE
-        self.previous_walking_state = False
 
+        self.footstep_effect_duration = 0
         self.knock_back = Vec()
 
     def walking(self):
@@ -186,17 +185,15 @@ class Player(Entity):
         if isinstance(other, Beer):
             other.alive = False
             self.life = min(self.life + self.BEER_LIFE, self.MAX_LIFE)
-            get_sound('pickup').play()
+            get_sound('pickup', 1).play()
 
     def foot_particles(self, game):
         if self.walking():
-            self.foot_step_particle_delay -= 1
+            self.footstep_particle_delay -= 1
 
-
-        # if self.foot_step_particle_delay <= 0:
+        # if self.footstep_particle_delay <= 0:
         if random() < self.vel.length_squared() / (self.SPEED ** 2 * 6):
-
-            self.foot_step_particle_delay = randrange(3, 8)
+            self.footstep_particle_delay = randrange(3, 8)
 
             a = gauss(angle(self.vel) + pi, 0.5)
             s = gauss(0.5, 0.1)
@@ -211,9 +208,11 @@ class Player(Entity):
             ))
 
     def footstep_sounds(self):
-        if self.previous_walking_state and not self.walking():
-            get_sound('footstep').stop()
-        elif not self.previous_walking_state and self.walking():
-            get_sound('footstep').play(-1)
+        if self.footstep_effect_duration % 9 == 0 and self.walking():
+            get_sound('footstep', 0.3).play()
 
-        self.previous_walking_state = self.walking()
+        self.footstep_effect_duration += 1
+
+        if not self.walking():
+            self.footstep_effect_duration = 0
+
