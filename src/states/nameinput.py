@@ -1,8 +1,9 @@
 import string
 
 import pygame
+from pygame import Vector2 as Vec
 
-from src.constants import GOLD, GAME_SIZE, BACKGROUND
+from src.constants import GOLD, GAME_SIZE, BACKGROUND, Files
 from src.states.leaderboard import Leaderboard
 from src.utils import draw_text, colored_text
 from src.window import State
@@ -12,7 +13,8 @@ class NameInputState(State):
     def __init__(self, score):
         # We need the score to pass it to the next State
         self.score = score
-        self.name = "Diego"
+        Files.NAME.touch()
+        self.name = Files.NAME.read_text() or "Cool kid"
         self.time = 0
         self.done = False
 
@@ -21,6 +23,8 @@ class NameInputState(State):
             self.name = self.name[:-1]
         elif event.key == pygame.K_RETURN:
             self.done = True
+            # Save the name
+            Files.NAME.write_text(self.name)
         else:
             l = event.unicode.lower()
             if l in string.ascii_letters + string.digits + " -_<>":
@@ -47,10 +51,12 @@ class NameInputState(State):
             ("_", self.cursor_color())
         )
 
+        center = Vec(GAME_SIZE) / 2
+
         rinp = inp.get_rect()
-        rinp.midbottom = GAME_SIZE / 2
+        rinp.midbottom = center
         rname = name.get_rect()
-        rname.midtop = GAME_SIZE / 2
+        rname.midtop = center
 
         display.blit(inp, rinp)
         display.blit(name, rname)

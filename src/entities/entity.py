@@ -42,6 +42,9 @@ class Entity:
 
 
     def can_collide(self, other):
+        if self is other:
+            return False
+
         if not self.SOLID or not other.SOLID:
             return False
 
