@@ -58,6 +58,7 @@ class Player(Entity):
     MASS = 1.0
     MAX_LIFE = 100
     BEER_LIFE = 10
+    KNOCKBACK_RESIST = 0.7
 
     def __init__(self):
         super().__init__((50, 150), (10, 10))
@@ -87,6 +88,8 @@ class Player(Entity):
 
         self.foot_step_particle_delay = 0
         self.life = self.MAX_LIFE
+
+        self.knock_back = Vec()
 
     def walking(self):
         """Whether the player is walking."""
@@ -155,7 +158,8 @@ class Player(Entity):
         if speed_x or speed_y:
             dir.scale_to_length(self.SPEED)
 
-        self.vel = (self.vel + dir * (1 + 2*self.attacking())) / 2
+        self.vel = (self.vel + dir * (1 + 2*self.attacking())) / 2 + self.knock_back
+        self.knock_back *= self.KNOCKBACK_RESIST
 
         # We clamp the position to the screen
         # if self.pos.x < game.camera.scroll:
@@ -177,7 +181,7 @@ class Player(Entity):
             # Check for enemies...
             ...
 
-    def on_collision(self, other):
+    def on_collision(self, other, dir):
         if isinstance(other, Beer):
             other.alive = False
             self.life = min(self.life + self.BEER_LIFE, self.MAX_LIFE)

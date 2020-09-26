@@ -67,10 +67,11 @@ class Entity:
     def collide(self, other):
         return Rect(self.pos, self.size).colliderect((other.pos, other.size))
 
-    def on_collision(self, other):
+    def on_collision(self, other, dir):
         pass
 
     def solve_collision_x(self, other: "Entity"):
+        assert self.__class__.__name__ == "Player"
 
         # Don't do collisions if one object is not solde
         if not self.can_collide(other):
@@ -87,8 +88,9 @@ class Entity:
             elif self.vel.x < 0:
                 self.pos.x = other.pos.x + other.size[0]
 
-            self.on_collision(other)
-            other.on_collision(self)
+            dir = Vec(self.vel.x, 0)
+            self.on_collision(other, dir)
+            other.on_collision(self, dir)
             #
             # coeff1 = other.MASS / (self.MASS + other.MASS) if other.MASS != INF else 0
             # coeff2 = self.MASS / (self.MASS + other.MASS) if self.MASS != INF else 0
@@ -109,5 +111,6 @@ class Entity:
             elif self.vel.y < 0:
                 self.pos.y = other.pos.y + other.size[1]
 
-            self.on_collision(other)
-            other.on_collision(self)
+            dir = Vec(0, self.vel.y)
+            self.on_collision(other, dir)
+            other.on_collision(self, dir)

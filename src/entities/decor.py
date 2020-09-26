@@ -56,3 +56,14 @@ class Fence(Entity):
     def __init__(self, pos):
         fence = Sprite(load_cached_image(Files.IMAGES / "fence.png"))
         super().__init__(pos, (15, 15), fence, wrap=True)
+
+class Bounce(Entity):
+    SOLID = True
+    KNOCKBACK = 16
+
+    def __init__(self, pos):
+        bounce = Animation.from_sheet(Files.IMAGES / "bounce.png", 19, 3, (-2, -2))
+        super().__init__(pos, (13, 13), bounce)
+
+    def on_collision(self, player, dir):
+        player.knock_back = -dir.normalize() * self.KNOCKBACK

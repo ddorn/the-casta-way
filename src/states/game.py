@@ -40,7 +40,7 @@ class GameState(State):
     def load_structures(self):
         structures = []
         for f in Files.STRUCTURES.iterdir():
-            if f.suffix == ".s":
+            if f.suffix == ".s" and f.stem == "bounce":
                 structures.append(Structure.load(f.stem))
         return structures
 
