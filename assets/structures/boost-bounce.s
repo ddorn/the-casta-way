@@ -1,0 +1,1 @@
+{"name": "boost-bounce", "objs": [{"type": "Bounce", "pos": [0.0, 0.0]}, {"type": "Boost", "pos": [2.0, 32.0]}, {"type": "Bounce", "pos": [0.0, 45.0]}, {"type": "Boost", "pos": [2.0, 17.0]}, {"type": "Beer", "pos": [170.0, 20.0]}, {"type": "Beer", "pos": [170.0, 35.0]}, {"type": "Bush", "pos": [150.0, 15.0]}, {"type": "Bush", "pos": [150.0, 30.0]}]}
