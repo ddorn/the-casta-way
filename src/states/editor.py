@@ -73,6 +73,10 @@ class EditorState(State):
                 self.elts_grid.pop(pos, None)
             else:
                 self.elts.pop(pos, None)
+        elif button == 4:
+            self.brush -= 1
+        elif button == 5:
+            self.brush += 1
         else:
             # brush
             if self.clip_to_grid:
@@ -80,6 +84,8 @@ class EditorState(State):
                 self.elts_grid[pos] = self.brushes[self.brush]
             else:
                 self.elts[pos] = self.brushes[self.brush]
+
+        self.brush %= len(self.brushes)
 
     def draw(self, display, prop):
         display.fill(self.BG_COLOR)
