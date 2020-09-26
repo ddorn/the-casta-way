@@ -156,7 +156,7 @@ class GameState(State):
 
         s = choice(self.structures)
         # print(s.name, s.height)
-        y = randrange(80, 261 - s.height)
+        y = randrange(80, 250 - s.height)
         rect = Rect(right, y, s.width + 35, s.height + 35)
 
         if not any(r.colliderect(rect) for r in self.struct_rects):
