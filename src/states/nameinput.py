@@ -1,4 +1,5 @@
 import string
+from random import randrange
 
 import pygame
 from pygame import Vector2 as Vec
@@ -15,6 +16,8 @@ class NameInputState(State):
         self.score = score
         Files.NAME.touch()
         self.name = Files.NAME.read_text() or "Cool kid"
+        Files.HASH.touch()
+        self.hash = Files.HASH.read_text() or str(randrange(1_000_000_000))
         self.time = 0
         self.done = False
 
@@ -25,6 +28,7 @@ class NameInputState(State):
             self.done = True
             # Save the name
             Files.NAME.write_text(self.name)
+            Files.HASH.write_text(self.hash)
         else:
             l = event.unicode.lower()
             if l in string.ascii_letters + string.digits + " -_<>":
@@ -39,7 +43,7 @@ class NameInputState(State):
         self.time += 1
 
         if self.done:
-            return Leaderboard(self.score, self.name)
+            return Leaderboard(self.score, self.name, self.hash)
         return self
 
     def draw(self, display, prop):

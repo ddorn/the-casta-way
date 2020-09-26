@@ -9,6 +9,7 @@ license = "WTFPL"
 python = "^3.7"
 pygame = "^1.9.6"
 click = "^7.1.2"
+requests = "^2.24.0"
 
 
 [tool.poetry.dev-dependencies]

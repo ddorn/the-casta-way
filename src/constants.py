@@ -23,3 +23,4 @@ class Files:
     # Files
     MAIN_FONT = FONTS / "ThaleahFat.ttf"
     NAME = DATA / "name"
+    HASH = DATA / "hash"
