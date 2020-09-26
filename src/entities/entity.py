@@ -5,7 +5,7 @@ from pygame import Vector2 as Vec
 from pygame import Rect
 
 from src.animation import BaseSprite
-from src.constants import INF
+from src.constants import INF, GAME_SIZE
 
 
 class Entity:
@@ -14,13 +14,14 @@ class Entity:
     MASS = float('inf')
     OFFSET = (0, 0)
 
-    def __init__(self, pos, size, sprite: BaseSprite = None, layer=0):
+    def __init__(self, pos, size, sprite: BaseSprite = None, layer=0, wrap=False):
         self.pos = Vec(pos)
         self.size = size
         self.vel = Vec()
         self.sprite = sprite or BaseSprite()
         self.alive = True
         self.layer = layer
+        self.wrap = wrap
 
     def __repr__(self):
         return f"<{self.__class__.__name__}(pos={self.pos}, size={self.size})>"
@@ -37,9 +38,15 @@ class Entity:
     def logic(self, game):
         self.sprite.logic()
 
-        if game.camera.to_screen(self.pos)[0] < -50:
-            self.alive = False
+        if self.wrap:
+            screen_pos = game.camera.to_screen(self.pos, self.layer)
 
+            # We warp it on the other side
+            if screen_pos[0] < -100:
+                self.pos.x += (GAME_SIZE[0] + 200)
+
+        elif game.camera.to_screen(self.pos)[0] < -50:
+            self.alive = False
 
     def can_collide(self, other):
         if self is other:

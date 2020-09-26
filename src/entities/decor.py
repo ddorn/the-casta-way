@@ -15,17 +15,8 @@ class Tree(Entity):
         offset = (-15, -17)
         pos = Vec(root_pos) - (9, 31)
 
-        super().__init__(pos, size, Sprite(tree, offset), layer)
+        super().__init__(pos, size, Sprite(tree, offset), layer, wrap=True)
         self.vel = Vec( - layer * 0.2, 0)
-
-    def logic(self, game):
-        screen_pos = game.camera.to_screen(self.pos, self.layer)
-
-        # We warp it on the other side
-        if screen_pos[0] < -100:
-            self.pos.x += (GAME_SIZE[0] + 200)
-        # elif screen_pos[0] > GAME_SIZE[0] + 100:
-        #     self.pos.x -= GAME_SIZE[0] + 100
 
 
 class Rock(Entity):
@@ -34,20 +25,7 @@ class Rock(Entity):
     def __init__(self, pos, wrap=False):
         rock = load_cached_image(Files.IMAGES / "rock.png")
         self.wrap = wrap
-        super(Rock, self).__init__(pos, rock.get_size(), Sprite(rock))
-
-    def logic(self, game):
-        if not self.wrap:
-            super(Rock, self).logic(game)
-            return
-
-        screen_pos = game.camera.to_screen(self.pos, self.layer)
-
-        # We warp it on the other side
-        if screen_pos[0] < -100:
-            self.pos.x += (GAME_SIZE[0] + 200)
-        # elif screen_pos[0] > GAME_SIZE[0] + 100:
-        #     self.pos.x -= GAME_SIZE[0] + 100
+        super(Rock, self).__init__(pos, rock.get_size(), Sprite(rock), wrap=wrap)
 
 
 class Beer(Entity):
@@ -71,3 +49,10 @@ class Bush(Entity):
     def __init__(self, pos):
         bush = Sprite(load_cached_image(Files.IMAGES / "bush.png"))
         super().__init__(pos, (15, 15), bush)
+
+class Fence(Entity):
+    SOLID = True
+
+    def __init__(self, pos):
+        fence = Sprite(load_cached_image(Files.IMAGES / "fence.png"))
+        super().__init__(pos, (15, 15), fence, wrap=True)

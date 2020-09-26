@@ -7,7 +7,7 @@ from pygame import Vector2 as Vec
 from src.camera import Camera
 from src.constants import Files, GAME_SIZE
 from src.entities import Particle
-from src.entities.decor import Tree, Rock, Beer
+from src.entities.decor import Tree, Rock, Beer, Fence
 from src.entities.particles import ParticleSystem
 from src.entities.player import Player
 from src.states.gameover import GameOver
@@ -79,7 +79,7 @@ class GameState(State):
         return self
 
     def draw(self, display, prop):
-        display.fill(self.BG_COLOR)
+        display.fill(0xc8d45d)
 
         # Draw the golden road
         display.fill(self.ROAD_COLOR, (0, 75, 400, 200))
@@ -160,6 +160,6 @@ class GameState(State):
             self.player.solve_collision_y(a)
 
     def generate_border(self):
-        for x in range(-100, GAME_SIZE[0] + 100, 15):
-            self.entities.append(Rock((x, 60), True))
-            self.entities.append(Rock((x, 275), True))
+        for x in range(-100, GAME_SIZE[0] + 100, 16):
+            self.entities.append(Fence((x, 60)))
+            self.entities.append(Fence((x, 270)))
