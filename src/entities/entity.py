@@ -5,7 +5,7 @@ from pygame import Vector2 as Vec
 from pygame import Rect
 
 from src.animation import BaseSprite
-from src.constants import INF, GAME_SIZE
+from src.constants import INF, GAME_SIZE, DEBUG_HITBOX
 
 
 class Entity:
@@ -32,8 +32,9 @@ class Entity:
         screen_pos = camera.to_screen(pos, self.layer)
         self.sprite.draw(display, screen_pos)
 
-        # One pixel with rect by default
-        # pygame.draw.rect(display, self.DEFAULT_COLOR, (screen_pos, self.size), 1)
+        if DEBUG_HITBOX:
+            # One pixel with rect by default
+            pygame.draw.rect(display, self.DEFAULT_COLOR, (screen_pos, self.size), 1)
 
     def logic(self, game):
         self.sprite.logic()
@@ -50,9 +51,6 @@ class Entity:
 
     def can_collide(self, other):
         if self is other:
-            return False
-
-        if not self.SOLID or not other.SOLID:
             return False
 
         # Don't do collisions between two immovable objects
@@ -83,10 +81,11 @@ class Entity:
             #     return
 
         if self.collide(other):
-            if self.vel.x > 0:
-                self.pos.x = other.pos.x - self.size[0]
-            elif self.vel.x < 0:
-                self.pos.x = other.pos.x + other.size[0]
+            if other.SOLID:
+                if self.vel.x > 0:
+                    self.pos.x = other.pos.x - self.size[0]
+                elif self.vel.x < 0:
+                    self.pos.x = other.pos.x + other.size[0]
 
             dir = Vec(self.vel.x, 0)
             self.on_collision(other, dir)
@@ -106,10 +105,11 @@ class Entity:
             return
 
         if self.collide(other):
-            if self.vel.y > 0:
-                self.pos.y = other.pos.y - self.size[1]
-            elif self.vel.y < 0:
-                self.pos.y = other.pos.y + other.size[1]
+            if other.SOLID:
+                if self.vel.y > 0:
+                    self.pos.y = other.pos.y - self.size[1]
+                elif self.vel.y < 0:
+                    self.pos.y = other.pos.y + other.size[1]
 
             dir = Vec(0, self.vel.y)
             self.on_collision(other, dir)

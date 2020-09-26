@@ -10,6 +10,7 @@ BACKGROUND = (34, 34, 34)
 GOLD = (0xfe, 0xcb, 0x20)
 
 DEBUG_STRUCT = True
+DEBUG_HITBOX = False
 
 class Files:
     # Directories
