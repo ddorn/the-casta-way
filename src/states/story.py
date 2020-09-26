@@ -1,3 +1,5 @@
+import pygame
+
 from src.constants import WHITE
 from src.states import GameState
 from src.utils import get_sound, draw_text
@@ -7,16 +9,37 @@ from src.window import State
 class StoryState(State):
     BG_COLOR = 0x222222
     TEXT_COLOR = (240, 240, 240)
+    DELAY = 45
 
     def __init__(self):
-        self.duration = 300  # Ten seconds
+        self.duration = 0
 
-        get_sound('intro').play()
+        self.text = """In the good old days,
+        the great Casta went through the haze
+        to find the key
+        and set happiness free
+        
+        Under his feet
+        unveil a golden road
+        He knew no defeat
+        And were never slowed
+        
+        You follow his steps
+        to find happiness        
+        And perhaps you may
+        ...
+        on The Casta Way !
+        """
+        # get_sound('intro').play()
+
+    def key_down(self, event):
+        if event.key == pygame.K_SPACE:
+            self.duration = 100000  # Put it an end
 
     def logic(self):
-        self.duration -= 1
+        self.duration += 1
 
-        if self.duration <= 0:
+        if self.duration > self.DELAY * (3 + len(self.text.splitlines())):  # Ten seconds
             return GameState()
         else:
             return self
@@ -24,20 +47,12 @@ class StoryState(State):
     def draw(self, display, prop):
         display.fill(self.BG_COLOR)
 
-        text = """The Casta Way is a long road made of gold
-by Casta himself in the ancient times.
-According to the legend, Casta hid the secret of happiness at the end of that road,
-but there are many obstacles in the way... 
+        y = 20
+        for i, line in enumerate(self.text.splitlines()[:self.duration // self.DELAY]):
+            text = draw_text(line.strip(), WHITE, size=16)
+            rect = text.get_rect()
+            rect.centerx = 200
+            rect.top = y
+            display.blit(text, rect)
+            y += rect.height
 
-Good luck to all of us, 
-and we hope that you too
-will find the secret of happiness.
-
-Casta's Disciple""".splitlines()
-
-        for i, line in enumerate(text):
-            text = draw_text(line, WHITE, size=16)
-            text_rect = text.get_rect()
-            text_rect.centerx = display.get_rect().centerx
-            text_rect.centery = (display.get_rect().centery / 2) + i * 15
-            display.blit(text, text_rect)

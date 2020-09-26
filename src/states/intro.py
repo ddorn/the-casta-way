@@ -1,6 +1,6 @@
 import pygame
 
-from src.constants import Files
+from src.constants import Files, DEBUG_STRUCT, DEBUG_STORY
 from src.states import GameState
 from src.states.story import StoryState
 from src.utils import get_sound
@@ -15,7 +15,8 @@ class IntroState(State):
         self.duration = 60  # two seconds
         self.text = self.get_title_surf()
 
-        get_sound('intro').play()
+        if not DEBUG_STORY:
+            get_sound('intro').play()
 
     def get_title_surf(self):
         font = pygame.font.Font(str(Files.MAIN_FONT), 32)
@@ -25,8 +26,8 @@ class IntroState(State):
     def logic(self):
         self.duration -= 1
 
-        if self.duration <= 0:
-            return GameState()
+        if self.duration <= 0 or DEBUG_STORY:
+            return StoryState()
         else:
             return self
 
