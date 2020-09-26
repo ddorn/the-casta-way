@@ -14,7 +14,7 @@ class State:
 
     def logic(self):
         """
-        All the logic of the game happens here, ie. how to get from one frame to another.
+        All the logic of the inner happens here, ie. how to get from one frame to another.
 
         This function must return the next state of the app.
         """

@@ -2,8 +2,8 @@ from math import pi
 from random import randrange, uniform, random, choice
 
 import pygame
-from pygame import Vector2 as Vec
 from pygame import Rect
+from pygame import Vector2 as Vec
 
 from src.camera import Camera
 from src.constants import Files, GAME_SIZE
@@ -12,6 +12,7 @@ from src.entities.decor import Tree, Beer, Fence
 from src.entities.particles import ParticleSystem
 from src.entities.player import Player
 from src.states.gameover import GameOver
+from src.states.pause import PauseState
 from src.structures import Structure
 from src.utils import load_cached_image
 from src.window import State
@@ -38,6 +39,8 @@ class GameState(State):
 
         self.generate_trees()
         self.generate_border()
+
+        self.paused = False
 
         pygame.mixer.music.load(str(Files.SOUNDS / 'soundtrack.ogg'))
         pygame.mixer.music.set_volume(0.5)
@@ -72,6 +75,9 @@ class GameState(State):
             else:
                 pygame.mixer.music.unpause()
 
+        if event.key == pygame.K_p:
+            self.paused = True
+
         self.player.key_down(event)
 
     def logic(self):
@@ -88,6 +94,10 @@ class GameState(State):
 
         self.camera.logic(self)
         self.physics()
+
+        if self.paused:
+            self.paused = False
+            return PauseState(self)
 
         if not self.player.alive:
             pygame.mixer.music.fadeout(500)

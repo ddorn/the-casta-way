@@ -19,9 +19,9 @@ def the_casta_way(editor):
         return Window(lambda: EditorState(editor)).run()
     else:
         game = Window(IntroState)
-        # game = Window(GameState)
+        # inner = Window(GameState)
         return game.run()
 
 
 if __name__ == "__main__":
-    print("To run the game, you need to start 'run_game.py', not this file.")
+    print("To run the inner, you need to start 'run_game.py', not this file.")

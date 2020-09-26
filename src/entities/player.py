@@ -162,8 +162,8 @@ class Player(Entity):
         self.knock_back *= self.KNOCKBACK_RESIST
 
         # We clamp the position to the screen
-        # if self.pos.x < game.camera.scroll:
-        #     self.pos.x = game.camera.scroll
+        # if self.pos.x < inner.camera.scroll:
+        #     self.pos.x = inner.camera.scroll
         #     self.vel.x = 0
 
     def key_down(self, event):
