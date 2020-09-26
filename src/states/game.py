@@ -63,6 +63,12 @@ class GameState(State):
             self.entities.append(Tree(pos, layer))
 
     def key_down(self, event):
+        if event.key == pygame.K_m:
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.pause()
+            else:
+                pygame.mixer.music.unpause()
+
         self.player.key_down(event)
 
     def logic(self):
