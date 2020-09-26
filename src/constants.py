@@ -10,7 +10,7 @@ WHITE = (240, 240, 240)
 BACKGROUND = (34, 34, 34)
 GOLD = (0xfe, 0xcb, 0x20)
 
-DEBUG_STRUCT = True
+DEBUG_STRUCT = False
 DEBUG_HITBOX = False
 DEBUG_STORY = False
 
