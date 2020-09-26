@@ -2,12 +2,11 @@ import pygame
 
 from src.constants import WHITE, Files
 from src.states import GameState
-from src.states.controls import ControlsState
 from src.utils import get_sound, draw_text
 from src.window import State
 
 
-class StoryState(State):
+class ControlsState(State):
     BG_COLOR = 0x222222
     TEXT_COLOR = (240, 240, 240)
     DELAY = 45
@@ -15,22 +14,15 @@ class StoryState(State):
     def __init__(self):
         self.duration = 0
 
-        self.text = """In the good old days,
-        the great Casta went through the haze
-        to find the key
-        and set happiness free
+        self.text = """use the arrows to move
+        and space to dash
         
-        Under his feet
-        unveil a golden road
-        He knew no defeat
-        And were never slowed
+        Don't get too thirsty
+        So drink enough beer !
         
-        You follow his steps
-        to find happiness        
-        And perhaps you may
-        ...
-        on The Casta Way !
+        Have fun !
         """
+
 
         pygame.mixer.music.load(str(Files.SOUNDS / 'story.ogg'))
         pygame.mixer.music.set_volume(0.5)
@@ -47,14 +39,14 @@ class StoryState(State):
         if self.duration > self.DELAY * (3 + len(self.text.splitlines())):  # Ten seconds
             pygame.mixer.music.fadeout(500)
             pygame.mixer.stop()
-            return ControlsState()
+            return GameState()
         else:
             return self
 
     def draw(self, display, prop):
         display.fill(self.BG_COLOR)
 
-        y = 20
+        y = 80
         for i, line in enumerate(self.text.splitlines()[:self.duration // self.DELAY]):
             text = draw_text(line.strip(), WHITE, size=16)
             rect = text.get_rect()

@@ -2,8 +2,8 @@ from math import sqrt
 
 
 class Camera:
-    SCROLL_TRIGGER = 300
-    DOUBLE_SPEED_DELAY = 600
+    SCROLL_TRIGGER = 200
+    DOUBLE_SPEED_DELAY = 500
 
     def __init__(self, parallax=0.1):
         self.scroll = 0
@@ -24,5 +24,5 @@ class Camera:
         screen_pos = self.to_screen(game.player.pos)
 
         if screen_pos[0] > self.SCROLL_TRIGGER and game.player.vel.x > 1:
-            prop_into_scroll_zone = ((screen_pos[0] - self.SCROLL_TRIGGER) / 300) ** 2
+            prop_into_scroll_zone = ((screen_pos[0] - self.SCROLL_TRIGGER) / 300) ** 4
             self.scroll += (screen_pos[0] - self.SCROLL_TRIGGER) * prop_into_scroll_zone
