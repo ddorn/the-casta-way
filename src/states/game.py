@@ -142,21 +142,22 @@ class GameState(State):
         # or horizontally and we can solve it appropiatly by
         # moving the object in the other direction
 
+        # We also use the fact that only the player can move
+        # So we don't loop through each pair of entities
+
         # X axis
         for entity in self.entities:
             entity.pos.x += entity.vel.x
 
-        for i, a in enumerate(self.entities):
-            for b in self.entities[i + 1:]:
-                a.solve_collision_x(b)
+        for a in self.entities:
+            self.player.solve_collision_x(a)
 
         # Y axis
         for entity in self.entities:
             entity.pos.y += entity.vel.y
 
-        for i, a in enumerate(self.entities):
-            for b in self.entities[i + 1:]:
-                a.solve_collision_y(b)
+        for a in self.entities:
+            self.player.solve_collision_y(a)
 
     def generate_border(self):
 
