@@ -20,7 +20,7 @@ VOLUME = {
     "footstep": 0.3,
     "intro": 1,
     "pickup": 0.1,
-    "soundtrack": 0.5,
+    "soundtrack": 0.7,
     "diamond_pickup": 1,
     "lost": 1,
     "leaderboard": 1,
