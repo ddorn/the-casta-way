@@ -3,6 +3,7 @@ from pygame import Vector2 as Vec
 
 from src.constants import Files, WHITE
 from src.states.leaderboard import Leaderboard
+from src.utils import colored_text
 from src.window import State
 
 
@@ -18,6 +19,11 @@ class GameOver(State):
         self.score_label = self.get_title('Score: ')
         self.score = self.get_title(score, self.SCORE_COLOR)
 
+        self.score_surf = colored_text(
+            ("Score: ", WHITE),
+            (score, self.SCORE_COLOR)
+        )
+
     def logic(self):
         self.duration -= 1
 
@@ -29,27 +35,19 @@ class GameOver(State):
     def draw(self, display, prop):
         display.fill(self.BG_COLOR)
 
+        # Every 20 frames we show the text for 14 frames
+        # and hide it for the 6 next
         if self.duration % 20 < 14:
-            # Every 20 frames we show the text for 14 frames
-            # and hide it for the 6 next
+
+            drect = display.get_rect()
+
             title_rect = self.text.get_rect()
-            title_rect.center = display.get_rect().center - Vec(0, 30)
+            title_rect.center = drect.center - Vec(0, 30)
             display.blit(self.text, title_rect)
 
-            score_label_rect = self.score_label.get_rect()
-            score_rect = self.score.get_rect()
-
-            score_label_rect.centery = display.get_rect().centery
-            score_rect.centery = display.get_rect().centery
-
-            halfwidth = (score_label_rect.width + score_rect.width) / 2
-            score_label_rect.left = display.get_rect().centerx - halfwidth
-            score_rect.right = display.get_rect().centerx + halfwidth
-
-            score_rect.top = score_label_rect.top
-
-            display.blit(self.score_label, score_label_rect)
-            display.blit(self.score, score_rect)
+            score_rect = self.score_surf.get_rect()
+            score_rect.center = drect.center
+            display.blit(self.score_surf, score_rect)
 
     def get_title(self, text, color=WHITE):
         font = pygame.font.Font(str(Files.MAIN_FONT), 32)

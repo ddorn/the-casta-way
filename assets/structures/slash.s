@@ -1,0 +1,1 @@
+{"name": "slash", "objs": [{"type": "Rock", "pos": [0.0, 60.0]}, {"type": "Rock", "pos": [15.0, 45.0]}, {"type": "Rock", "pos": [30.0, 30.0]}, {"type": "Rock", "pos": [45.0, 15.0]}, {"type": "Rock", "pos": [60.0, 0.0]}, {"type": "Beer", "pos": [65.0, 50.0]}]}

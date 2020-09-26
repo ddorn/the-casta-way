@@ -29,7 +29,6 @@ class EditorState(State):
         except:
             print(f"Could not load {name}. Starting new file.")
             elts = {}
-            raise
 
         self.elts = elts
         self.elts_grid = {}
@@ -119,7 +118,6 @@ class EditorState(State):
             Elt(e.__name__, tuple(self.grid_pos(pos, e) - min_pos))
             for pos, e in self.elts_grid.items()
         ]
-
 
         struct = Structure(self.name, elts)
         struct.save()

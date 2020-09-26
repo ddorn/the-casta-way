@@ -1,0 +1,1 @@
+{"name": "hwall5", "objs": [{"type": "Rock", "pos": [0.0, 0.0]}, {"type": "Rock", "pos": [15.0, 0.0]}, {"type": "Rock", "pos": [30.0, 0.0]}, {"type": "Rock", "pos": [45.0, 0.0]}, {"type": "Rock", "pos": [60.0, 0.0]}]}

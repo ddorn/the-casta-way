@@ -17,8 +17,8 @@ def the_casta_way(editor):
     if editor:
         return Window(lambda: EditorState(editor)).run()
     else:
-        # game = Window(IntroState())
-        game = Window(GameState)
+        game = Window(IntroState)
+        # game = Window(GameState)
         return game.run()
 
 

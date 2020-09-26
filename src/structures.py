@@ -6,6 +6,7 @@ from typing import List
 from pygame import Vector2 as Vec
 
 from src.constants import Files
+from src.entities import Entity
 from src.entities.decor import Rock, Beer
 
 
@@ -13,6 +14,10 @@ from src.entities.decor import Rock, Beer
 class Elt:
     type: str
     pos: Vec
+
+    @property
+    def klass(self):
+        return self.name_to_class(self.type)
 
     @classmethod
     def load(cls, obj):
@@ -29,6 +34,8 @@ class Elt:
     def class_to_name(cls):
         return cls.__name__
 
+    def spawn(self, pos):
+        return self.klass(pos + self.pos)
 
 
 class Structure:
@@ -46,9 +53,11 @@ class Structure:
 
         file.write_text(json.dumps(j))
 
+        print(f"Saved {len(j['objs'])} objects to {file}.")
+
     @staticmethod
     def name_to_file(name):
-        return Files.STRUCTURE / (name + ".s")
+        return Files.STRUCTURES / (name + ".s")
 
     @classmethod
     def load(cls, name):
@@ -61,7 +70,20 @@ class Structure:
 
         return struct
 
+    def spawn(self, pos) -> List[Entity]:
+        return [
+            e.spawn(pos)
+            for e in self.elts
+        ]
 
+
+    @property
+    def width(self):
+        return max(e.pos[0] for e in self.elts) - min(e.pos[0] for e in self.elts)
+
+    @property
+    def height(self):
+        return max(e.pos[1] for e in self.elts) - min(e.pos[1] for e in self.elts)
 
 
 

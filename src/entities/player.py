@@ -181,8 +181,6 @@ class Player(Entity):
         if isinstance(other, Beer):
             other.alive = False
             self.life = min(self.life + self.BEER_LIFE, self.MAX_LIFE)
-        else:
-            print(other)
 
     def foot_particles(self, game):
         if self.walking():

@@ -1,5 +1,5 @@
 from math import pi
-from random import randrange, gauss, uniform, random
+from random import randrange, gauss, uniform, random, choice
 
 import pygame
 from pygame import Vector2 as Vec
@@ -11,6 +11,7 @@ from src.entities.decor import Tree, Rock, Beer
 from src.entities.particles import ParticleSystem
 from src.entities.player import Player
 from src.states.gameover import GameOver
+from src.structures import Structure
 from src.utils import load_cached_image
 from src.window import State
 
@@ -31,9 +32,22 @@ class GameState(State):
 
         self.health_bar = load_cached_image(Files.IMAGES / "health_bar.png")
 
+        self.structures = self.load_structures()
+
+        self.generate_trees()
+
+    def load_structures(self):
+        structures = []
+        for f in Files.STRUCTURES.iterdir():
+            if f.suffix == ".s":
+                structures.append(Structure.load(f.stem))
+        return structures
+
+    def generate_trees(self):
         # Generate trees
         for i in range(8):
             pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(280, 330))
+
             layer = (pos[1] - 280) / 20 + 1
             self.entities.append(Tree(pos, layer))
         for i in range(8):
@@ -45,7 +59,7 @@ class GameState(State):
         self.player.key_down(event)
 
     def logic(self):
-        self.score += 1
+        self.score = int(self.camera.scroll)
         self.generate_terrain()
         self.road_particles()
 
@@ -60,7 +74,6 @@ class GameState(State):
         self.physics()
 
         if not self.player.alive:
-            from src.states import IntroState
             return GameOver(self.score)
         return self
 
@@ -75,7 +88,7 @@ class GameState(State):
             entity.draw(display, self.camera, prop)
 
         # Draw the score
-        score_surf = self.huge_font.render("{:04}".format(int(self.camera.scroll)), False, (240, 240, 240), self.BG_COLOR)
+        score_surf = self.huge_font.render("{:04}".format(self.score), False, (240, 240, 240), self.BG_COLOR)
         rect = score_surf.get_rect()
         # rect.top = -10
         rect.centerx = 200
@@ -95,19 +108,16 @@ class GameState(State):
         display.blit(self.health_bar, rect)
 
     def generate_terrain(self):
-        if random() < 0.05:
-            self.entities.append(Rock(
-                (self.camera.scroll + GAME_SIZE[0], randrange(75, 260))
-            ))
+        right = self.camera.scroll + GAME_SIZE[0]
 
         if random() < 0.01:
-            y = randrange(75, 200)
-            for i in range(5):
-                self.entities.append(Rock(
-                    (self.camera.scroll + GAME_SIZE[0], y + 16 * i)
-                ))
+            s = choice(self.structures)
+            y = randrange(75, 275 - s.height)
+            self.entities.extend(
+                s.spawn(Vec(right, y))
+            )
 
-        if random() < 0.03:
+        if random() < 0.01:
             self.entities.append(Beer(
                 (self.camera.scroll + GAME_SIZE[0], randrange(75, 260))
             ))

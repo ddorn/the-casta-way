@@ -1,12 +1,13 @@
 import pygame
 
-from src.constants import Files, WHITE
+from src.constants import Files, WHITE, BACKGROUND, GOLD
+from src.utils import draw_text, colored_text
 from src.window import State
 
 
 class Leaderboard(State):
-    BG_COLOR = 0x222222
-    SCORE_COLOR = (0xfe, 0xcb, 0x20)
+    BG_COLOR = BACKGROUND
+    SCORE_COLOR = GOLD
 
     def __init__(self, score, name='Bg Timide'):
         self.restart = False
@@ -30,7 +31,7 @@ class Leaderboard(State):
     def draw(self, display, prop):
         display.fill(self.BG_COLOR)
 
-        leaderboard_title = self.get_text('Leaderboard', self.SCORE_COLOR)
+        leaderboard_title = draw_text('Leaderboard', self.SCORE_COLOR)
         leaderboard_title_rect = leaderboard_title.get_rect()
         leaderboard_title_rect.top = 20
         leaderboard_title_rect.centerx = display.get_rect().centerx
@@ -47,7 +48,7 @@ class Leaderboard(State):
         )
 
         if self.time % 40 > 24:
-            restart_text = self.get_text('Press R to restart', WHITE, 16)
+            restart_text = draw_text('Press R to restart', WHITE, size=16)
             restart_text_rect = restart_text.get_rect()
             restart_text_rect.bottom = 290
             restart_text_rect.centerx = display.get_rect().centerx
@@ -60,7 +61,14 @@ class Leaderboard(State):
 
     def print_score(self, display, info, i):
         name, score, rank = info
-        list_item = self.get_text(f'{rank + 1}. {name} ({score})', size=16)
+        list_item = colored_text(
+            (rank, GOLD),
+            (f". {name} (", WHITE),
+            (score, (255, 60, 120)),
+            (")", WHITE),
+            size=16
+        )
+        # list_item = draw_text(f'{rank + 1}. {name} ({score})', size=16)
         list_item_rect = list_item.get_rect()
         list_item_rect.top = 40 + (i + 1) * 24
         list_item_rect.centerx = display.get_rect().centerx
@@ -68,7 +76,7 @@ class Leaderboard(State):
 
     def get_scores(self):
         return [
-            ('John', 17, 0),
+            ('John', 2048, 0),
             ('Gerard Depardieu', 17, 1),
             ('Leo', 17, 2),
             ('Felix Dorn', 17, 3),

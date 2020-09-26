@@ -1,0 +1,1 @@
+{"name": "vwall5", "objs": [{"type": "Rock", "pos": [0.0, 0.0]}, {"type": "Rock", "pos": [0.0, 15.0]}, {"type": "Rock", "pos": [0.0, 30.0]}, {"type": "Rock", "pos": [0.0, 45.0]}, {"type": "Rock", "pos": [0.0, 60.0]}]}
