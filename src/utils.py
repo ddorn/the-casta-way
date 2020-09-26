@@ -49,9 +49,11 @@ def get_font(size, path=Files.MAIN_FONT):
 
 
 @lru_cache(maxsize=100)
-def draw_text(text, color=WHITE, bg_color=BACKGROUND, size=32, font_path=Files.MAIN_FONT):
+def draw_text(text, color=WHITE, bg_color=None, size=32, font_path=Files.MAIN_FONT):
     font = get_font(size, font_path)
-    return font.render(text, False, color, bg_color)
+    if bg_color:
+        return font.render(text, False, color, bg_color)
+    return font.render(text, False, color)
 
 
 @lru_cache(maxsize=100)
