@@ -1,5 +1,5 @@
 from math import pi
-from random import randrange, gauss, uniform, random, choice
+from random import randrange, uniform, random, choice
 
 import pygame
 from pygame import Vector2 as Vec
@@ -35,6 +35,7 @@ class GameState(State):
         self.structures = self.load_structures()
 
         self.generate_trees()
+        self.generate_border()
 
     def load_structures(self):
         structures = []
@@ -45,12 +46,12 @@ class GameState(State):
 
     def generate_trees(self):
         # Generate trees
-        for i in range(8):
-            pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(280, 330))
+        for i in range(24):
+            pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(290, 330))
 
             layer = (pos[1] - 280) / 20 + 1
             self.entities.append(Tree(pos, layer))
-        for i in range(8):
+        for i in range(24):
             pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(12, 75))
             layer = (pos[1]) / 75
             self.entities.append(Tree(pos, layer))
@@ -88,7 +89,7 @@ class GameState(State):
             entity.draw(display, self.camera, prop)
 
         # Draw the score
-        score_surf = self.huge_font.render("{:04}".format(self.score), False, (240, 240, 240), self.BG_COLOR)
+        score_surf = self.huge_font.render("{:04}".format(len(self.entities)), False, (240, 240, 240), self.BG_COLOR)
         rect = score_surf.get_rect()
         # rect.top = -10
         rect.centerx = 200
@@ -146,7 +147,7 @@ class GameState(State):
             entity.pos.x += entity.vel.x
 
         for i, a in enumerate(self.entities):
-            for b in self.entities[i+1:]:
+            for b in self.entities[i + 1:]:
                 a.solve_collision_x(b)
 
         # Y axis
@@ -154,5 +155,11 @@ class GameState(State):
             entity.pos.y += entity.vel.y
 
         for i, a in enumerate(self.entities):
-            for b in self.entities[i+1:]:
+            for b in self.entities[i + 1:]:
                 a.solve_collision_y(b)
+
+    def generate_border(self):
+
+        for x in range(-100, GAME_SIZE[0] + 100, 15):
+            self.entities.append(Rock((x, 60), True))
+            self.entities.append(Rock((x, 275), True))

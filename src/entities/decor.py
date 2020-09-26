@@ -1,4 +1,3 @@
-import pygame
 from pygame import Vector2 as Vec
 
 from src.animation import Sprite, Animation
@@ -28,12 +27,27 @@ class Tree(Entity):
         elif screen_pos[0] > GAME_SIZE[0] + 100:
             self.pos.x -= GAME_SIZE[0] + 100
 
+
 class Rock(Entity):
     SOLID = True
 
-    def __init__(self, pos):
+    def __init__(self, pos, wrap=False):
         rock = load_cached_image(Files.IMAGES / "rock.png")
+        self.wrap = wrap
         super(Rock, self).__init__(pos, rock.get_size(), Sprite(rock))
+
+    def logic(self, game):
+        if not self.wrap:
+            return
+
+        screen_pos = game.camera.to_screen(self.pos, self.layer)
+
+        # We warp it on the other side
+        if screen_pos[0] < -100:
+            self.pos.x += (GAME_SIZE[0] + 200)
+        elif screen_pos[0] > GAME_SIZE[0] + 100:
+            self.pos.x -= GAME_SIZE[0] + 100
+
 
 class Beer(Entity):
     SOLID = True
