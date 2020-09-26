@@ -3,6 +3,7 @@ from pygame import Vector2 as Vec
 
 from src.constants import Files, WHITE
 from src.states.leaderboard import Leaderboard
+from src.states.nameinput import NameInputState
 from src.utils import colored_text
 from src.window import State
 
@@ -28,7 +29,7 @@ class GameOver(State):
         self.duration -= 1
 
         if self.duration <= 0:
-            return Leaderboard(self.player_score)
+            return NameInputState(self.player_score)
         else:
             return self
 
