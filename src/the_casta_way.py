@@ -10,7 +10,7 @@ from src.window import Window
 
 
 @click.command()
-@click.option("--editor")
+@click.option("--editor", "-e")
 def the_casta_way(editor):
     pygame.mixer.pre_init(44100, -16, 1, 512)
     pygame.init()

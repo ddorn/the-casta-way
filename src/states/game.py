@@ -125,10 +125,14 @@ class GameState(State):
     def generate_terrain(self):
         right = self.camera.scroll + GAME_SIZE[0]
 
-        if random() < 0.01:
+        for r in self.struct_rects[:]:
+            if r.right < self.camera.scroll:
+                self.struct_rects.remove(r)
+
+        if random() < 0.04:
             s = choice(self.structures)
             y = randrange(75, 275 - s.height)
-            rect = Rect(right, y, s.width, s.height)
+            rect = Rect(right, y, s.width + 15, s.height + 15)
 
             if not any(r.colliderect(rect) for r in self.struct_rects):
                 self.struct_rects.append(rect)
