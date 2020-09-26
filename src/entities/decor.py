@@ -43,3 +43,16 @@ class Beer(Entity):
         offset = (-1, -3)
         super().__init__(pos, size, Animation.from_sheet(Files.IMAGES / "beer.png", 9, 4, offset))
 
+
+class Trunk(Entity):
+    SOLID = True
+
+    def __init__(self, pos):
+        trunk = Sprite(load_cached_image(Files.IMAGES / "trunk.png"))
+        super().__init__(pos, (18, 18), trunk)
+
+class Bush(Entity):
+    SOLID = True
+    def __init__(self, pos):
+        bush = Sprite(load_cached_image(Files.IMAGES / "bush.png"))
+        super().__init__(pos, (15, 15), bush)

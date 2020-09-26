@@ -6,8 +6,8 @@ import pygame.gfxdraw
 
 from src.camera import Camera
 from src.constants import GAME_SIZE
-from src.entities.decor import Rock, Beer
-from src.structures import Structure, Elt
+from src.entities.decor import Rock, Beer, Trunk
+from src.structures import Structure, Elt, OBJECTS
 from src.window import State
 
 
@@ -19,24 +19,33 @@ class EditorState(State):
     def __init__(self, name):
         self.name = name
 
+        self.elts = {}
+        self.elts_grid = {}
+
         try:
             struct = Structure.load(name)
             pprint(struct.elts)
-            elts = {
-                tuple(e.pos): Elt.name_to_class(e.type)
-                for e in struct.elts
-            }
-        except:
-            print(f"Could not load {name}. Starting new file.")
-            elts = {}
 
-        self.elts = elts
-        self.elts_grid = {}
+            for e in struct.elts:
+                on_grid, pos = self.on_grid(e.pos, e.klass)
+                if on_grid:
+                    self.elts_grid[pos] = e.klass
+                else:
+                    self.elts[pos] = e.klass
+        except FileNotFoundError:
+            print(f"Could not find {name}. Starting new file.")
 
-        self.brushes = [Rock, Beer]
+        self.brushes = OBJECTS
         self.brush = 0
         self.camera = Camera()
         self.clip_to_grid = True
+
+    def on_grid(self, pos, brush):
+        as_grid = Vec(pos) // self.GRID_SIZE
+        if pos == self.grid_pos(as_grid, brush):
+            return True, tuple(as_grid)
+        return False, tuple(pos)
+
 
     def key_down(self, event):
 
@@ -102,11 +111,11 @@ class EditorState(State):
     def save(self):
         min_x = min(
             min((pos[0] for pos in self.elts), default=1000),
-            min((self.grid_pos(pos, e)[0] for pos, e in self.elts_grid), default=1000),
+            min((self.grid_pos(pos, e)[0] for pos, e in self.elts_grid.items()), default=1000),
         )
         min_y = min(
             min((pos[1] for pos in self.elts), default=1000),
-            min((self.grid_pos(pos, e)[1] for pos, e in self.elts_grid), default=1000),
+            min((self.grid_pos(pos, e)[1] for pos, e in self.elts_grid.items()), default=1000),
         )
 
         min_pos = Vec(min_x, min_y)

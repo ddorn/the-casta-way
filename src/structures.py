@@ -7,8 +7,10 @@ from pygame import Vector2 as Vec
 
 from src.constants import Files
 from src.entities import Entity
-from src.entities.decor import Rock, Beer
+from src.entities.decor import Rock, Beer, Trunk, Bush
 
+OBJECTS = [Rock, Beer, Trunk, Bush]
+"""Collection of objects in structures."""
 
 @dataclass
 class Elt:
@@ -27,7 +29,7 @@ class Elt:
     def name_to_class(name):
         return {
             c.__name__: c
-            for c in [Rock, Beer]
+            for c in OBJECTS
         }[name]
 
     @staticmethod
