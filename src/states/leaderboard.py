@@ -10,12 +10,12 @@ class Leaderboard(State):
     BG_COLOR = BACKGROUND
     SCORE_COLOR = GOLD
 
-    def __init__(self, score, name):
+    def __init__(self, score, name, hash):
         self.restart = False
         self.time = 0
         id = self.put_score(
             name,
-            score,
+            hash,
             score
         )
         self.scores = self.get_scores()
