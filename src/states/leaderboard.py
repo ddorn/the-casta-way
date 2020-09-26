@@ -62,7 +62,7 @@ class Leaderboard(State):
     def print_score(self, display, info, i):
         name, score, rank = info
         list_item = colored_text(
-            (rank, GOLD),
+            (rank + 1, GOLD),
             (f". {name} (", WHITE),
             (score, (255, 60, 120)),
             (")", WHITE),
