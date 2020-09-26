@@ -7,7 +7,7 @@ from src.utils import load_cached_image, get_font, get_sound
 
 
 class Tree(Entity):
-    SOLID = True
+    SOLID = False
 
     def __init__(self, root_pos, layer):
         tree = load_cached_image(Files.IMAGES / "tree.png")
@@ -77,7 +77,7 @@ class Bounce(Entity):
 
 class Boost(Entity):
     SOLID = False
-    KNOCKBACK = 14
+    KNOCKBACK = 16
     IMAGE = "boost.png"
     DIR = (1, 0)
 
@@ -110,8 +110,8 @@ class Diamond(Entity):
     SOLID = False
 
     def __init__(self, pos, wrap=False):
-        diamond = load_cached_image(Files.IMAGES / "diamond.png")
-        super(Diamond, self).__init__(pos, (15, 15), Sprite(diamond), wrap=wrap)
+        diamond = Animation.from_sheet(Files.IMAGES / "diamond.png", 14)
+        super(Diamond, self).__init__(pos, (14, 13), diamond, wrap=wrap)
 
     def on_collision(self, other, dir):
         get_sound('diamond_pickup').play()

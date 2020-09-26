@@ -152,6 +152,8 @@ class EditorState(State):
             pos += (5, 5)
         elif issubclass(e, Boost):
             pos += (2, 2)
+        elif e == Diamond:
+            pos += (1, 1)
 
         return pos
 

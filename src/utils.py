@@ -16,6 +16,16 @@ def i(vec):
     return (int(round(vec.x)), int(round(vec.y)))
 
 
+def clamp(x, mini, maxi):
+    if maxi < mini:
+        return x
+    if x < mini:
+        return mini
+    if maxi < x:
+        return maxi
+    return x
+
+
 def angle(vec) -> "radians":
     x, y = vec
 

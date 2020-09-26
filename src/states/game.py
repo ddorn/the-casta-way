@@ -6,7 +6,7 @@ from pygame import Rect
 from pygame import Vector2 as Vec
 
 from src.camera import Camera
-from src.constants import Files, GAME_SIZE
+from src.constants import Files, GAME_SIZE, MAX_SPEED
 from src.entities import Particle
 from src.entities.decor import Tree, Beer, Fence
 from src.entities.particles import ParticleSystem
@@ -14,7 +14,7 @@ from src.entities.player import Player
 from src.states.gameover import GameOver
 from src.states.pause import PauseState
 from src.structures import Structure
-from src.utils import load_cached_image
+from src.utils import load_cached_image, clamp
 from src.window import State
 
 
@@ -184,14 +184,14 @@ class GameState(State):
 
         # X axis
         for entity in self.entities:
-            entity.pos.x += entity.vel.x
+            entity.pos.x += clamp(entity.vel.x, -MAX_SPEED, MAX_SPEED)
 
         for a in self.entities:
             self.player.solve_collision_x(a)
 
         # Y axis
         for entity in self.entities:
-            entity.pos.y += entity.vel.y
+            entity.pos.y += clamp(entity.vel.y, -MAX_SPEED, MAX_SPEED)
 
         for a in self.entities:
             self.player.solve_collision_y(a)
