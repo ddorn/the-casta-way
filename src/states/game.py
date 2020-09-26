@@ -116,7 +116,7 @@ class GameState(State):
             entity.draw(display, self.camera, prop)
 
         # Draw the score
-        score_surf = self.huge_font.render("{:04}".format(len(self.entities)), False, (240, 240, 240), self.BG_COLOR)
+        score_surf = self.huge_font.render("{:04}".format(self.score), False, (240, 240, 240), self.BG_COLOR)
         rect = score_surf.get_rect()
         # rect.top = -10
         rect.centerx = 200
