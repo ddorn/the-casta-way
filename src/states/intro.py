@@ -2,6 +2,7 @@ import pygame
 
 from src.constants import Files
 from src.states import GameState
+from src.utils import get_sound
 from src.window import State
 
 
@@ -12,6 +13,8 @@ class IntroState(State):
     def __init__(self):
         self.duration = 60  # two seconds
         self.text = self.get_title_surf()
+
+        get_sound('intro').play()
 
     def get_title_surf(self):
         font = pygame.font.Font(str(Files.MAIN_FONT), 32)

@@ -3,7 +3,7 @@ from pygame import Vector2 as Vec
 from src.animation import Sprite, Animation
 from src.constants import Files, GAME_SIZE, WHITE, BACKGROUND
 from src.entities import Entity
-from src.utils import load_cached_image, get_font
+from src.utils import load_cached_image, get_font, get_sound
 
 
 class Tree(Entity):
@@ -67,6 +67,7 @@ class Bounce(Entity):
 
     def on_collision(self, player, dir):
         player.knock_back = -dir.normalize() * self.KNOCKBACK
+        get_sound('bounce').play()
 
 
 class Boost(Entity):
