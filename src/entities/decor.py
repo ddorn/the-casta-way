@@ -24,8 +24,8 @@ class Tree(Entity):
         # We warp it on the other side
         if screen_pos[0] < -100:
             self.pos.x += (GAME_SIZE[0] + 200)
-        elif screen_pos[0] > GAME_SIZE[0] + 100:
-            self.pos.x -= GAME_SIZE[0] + 100
+        # elif screen_pos[0] > GAME_SIZE[0] + 100:
+        #     self.pos.x -= GAME_SIZE[0] + 100
 
 
 class Rock(Entity):
@@ -38,6 +38,7 @@ class Rock(Entity):
 
     def logic(self, game):
         if not self.wrap:
+            super(Rock, self).logic(game)
             return
 
         screen_pos = game.camera.to_screen(self.pos, self.layer)
@@ -45,8 +46,8 @@ class Rock(Entity):
         # We warp it on the other side
         if screen_pos[0] < -100:
             self.pos.x += (GAME_SIZE[0] + 200)
-        elif screen_pos[0] > GAME_SIZE[0] + 100:
-            self.pos.x -= GAME_SIZE[0] + 100
+        # elif screen_pos[0] > GAME_SIZE[0] + 100:
+        #     self.pos.x -= GAME_SIZE[0] + 100
 
 
 class Beer(Entity):

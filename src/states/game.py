@@ -52,7 +52,7 @@ class GameState(State):
             layer = (pos[1] - 280) / 20 + 1
             self.entities.append(Tree(pos, layer))
         for i in range(24):
-            pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(12, 75))
+            pos = (randrange(-100, GAME_SIZE[0] + 100), randrange(12, 60))
             layer = (pos[1]) / 75
             self.entities.append(Tree(pos, layer))
 
@@ -118,7 +118,7 @@ class GameState(State):
                 s.spawn(Vec(right, y))
             )
 
-        if random() < 0.01:
+        if random() < 0.04:
             self.entities.append(Beer(
                 (self.camera.scroll + GAME_SIZE[0], randrange(75, 260))
             ))
