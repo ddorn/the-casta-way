@@ -160,7 +160,6 @@ class GameState(State):
             self.player.solve_collision_y(a)
 
     def generate_border(self):
-
         for x in range(-100, GAME_SIZE[0] + 100, 15):
             self.entities.append(Rock((x, 60), True))
             self.entities.append(Rock((x, 275), True))
