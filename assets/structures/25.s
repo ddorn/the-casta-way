@@ -1,0 +1,1 @@
+{"name": "25", "objs": [{"type": "Boost", "pos": [0.0, 0.0]}, {"type": "Boost", "pos": [0.0, 15.0]}, {"type": "Boost", "pos": [90.0, 0.0]}, {"type": "Boost", "pos": [90.0, 15.0]}, {"type": "Rock", "pos": [43.0, 13.0]}, {"type": "Beer", "pos": [48.0, 3.0]}]}
