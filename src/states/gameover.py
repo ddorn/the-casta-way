@@ -4,7 +4,7 @@ from pygame import Vector2 as Vec
 from src.constants import Files, WHITE
 from src.states.leaderboard import Leaderboard
 from src.states.nameinput import NameInputState
-from src.utils import colored_text
+from src.utils import colored_text, get_sound
 from src.window import State
 
 
@@ -24,6 +24,8 @@ class GameOver(State):
             ("Score: ", WHITE),
             (score, self.SCORE_COLOR)
         )
+
+        get_sound('lost').play()
 
     def logic(self):
         self.duration -= 1

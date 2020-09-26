@@ -1,6 +1,6 @@
 import pygame
 
-from src.constants import WHITE
+from src.constants import WHITE, Files
 from src.states import GameState
 from src.utils import get_sound, draw_text
 from src.window import State
@@ -30,7 +30,11 @@ class StoryState(State):
         ...
         on The Casta Way !
         """
-        # get_sound('intro').play()
+
+        pygame.mixer.music.load(str(Files.SOUNDS / 'story.ogg'))
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play(-1)
+
 
     def key_down(self, event):
         if event.key == pygame.K_SPACE:
@@ -40,6 +44,8 @@ class StoryState(State):
         self.duration += 1
 
         if self.duration > self.DELAY * (3 + len(self.text.splitlines())):  # Ten seconds
+            pygame.mixer.music.fadeout(500)
+            pygame.mixer.stop()
             return GameState()
         else:
             return self

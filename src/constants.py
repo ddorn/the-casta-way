@@ -21,7 +21,10 @@ VOLUME = {
     "intro": 1,
     "pickup": 0.1,
     "soundtrack": 0.5,
-    "diamond_pickup": 1
+    "diamond_pickup": 1,
+    "lost": 1,
+    "leaderboard": 1,
+    "story": 1
 }
 
 class Files:

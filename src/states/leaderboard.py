@@ -26,11 +26,17 @@ class Leaderboard(State):
         start_new_thread(self.set_scores, (name, hash, score))
 
 
+        pygame.mixer.music.load(str(Files.SOUNDS / 'leaderboard.wav'))
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play(-1)
+
     def logic(self):
         self.time += 1
 
         if self.restart:
             from src.states import GameState
+            pygame.mixer.music.fadeout(500)
+            pygame.mixer.stop()
             return GameState()
         elif self.game_score > 100000 and not self.from_the_end:
             return TheEndState(self)

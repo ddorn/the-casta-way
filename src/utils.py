@@ -69,7 +69,7 @@ def draw_text(text, color=WHITE, bg_color=None, size=32, font_path=Files.MAIN_FO
 @lru_cache(maxsize=100)
 def get_sound(name):
     sound = pygame.mixer.Sound((str(Files.SOUNDS / (name + '.wav'))))
-    sound.set_volume(VOLUME[name])
+    sound.set_volume(VOLUME.get(name, 1))
 
     return sound
 
