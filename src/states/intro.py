@@ -26,7 +26,7 @@ class IntroState(State):
         self.duration -= 1
 
         if self.duration <= 0:
-            return StoryState()
+            return GameState()
         else:
             return self
 

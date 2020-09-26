@@ -23,7 +23,6 @@ class GameState(State):
     ROAD_COLOR = 0xfecb20
 
     def __init__(self):
-        self.score = 0
         self.huge_font = pygame.font.Font(str(Files.MAIN_FONT), 64)
 
         self.camera = Camera()
@@ -53,6 +52,10 @@ class GameState(State):
                 structures.append(Structure.load(f.stem))
         return structures
 
+    @property
+    def score(self):
+        return 100000 + int(self.camera.scroll + self.player.bonus)
+
     def generate_trees(self):
         # Generate trees
         x1 = 0
@@ -81,7 +84,6 @@ class GameState(State):
         self.player.key_down(event)
 
     def logic(self):
-        self.score = int(self.camera.scroll)
         self.generate_terrain()
         self.road_particles()
 

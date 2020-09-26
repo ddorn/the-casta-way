@@ -6,7 +6,7 @@ import pygame.gfxdraw
 
 from src.camera import Camera
 from src.constants import GAME_SIZE, WHITE
-from src.entities.decor import Rock, Beer, Trunk, Boost
+from src.entities.decor import Rock, Beer, Trunk, Boost, Diamond
 from src.structures import Structure, Elt, OBJECTS
 from src.utils import draw_text, colored_text
 from src.window import State

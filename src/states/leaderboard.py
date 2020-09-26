@@ -2,6 +2,7 @@ import pygame
 from requests import get as fetch
 
 from src.constants import Files, WHITE, BACKGROUND, GOLD
+from src.states.theend import TheEndState
 from src.utils import draw_text, colored_text
 from src.window import State
 
@@ -18,6 +19,7 @@ class Leaderboard(State):
             hash,
             score
         )
+        self.from_the_end = False
         self.scores = self.get_scores()
         self.current_score = next(filter(lambda score: score.id == id, self.scores))
 
@@ -27,6 +29,8 @@ class Leaderboard(State):
         if self.restart:
             from src.states import GameState
             return GameState()
+        elif self.current_score.score > 100000 and not self.from_the_end:
+            return TheEndState(self)
         else:
             return self
 
@@ -95,7 +99,7 @@ class Leaderboard(State):
 
 class Score:
     def __init__(self, id, name, score, rank):
-        self.id = id
+        self.id = int(id)
         self.name = name
-        self.score = score
-        self.rank = rank
+        self.score = int(score)
+        self.rank = int(rank)

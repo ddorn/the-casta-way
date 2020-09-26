@@ -20,7 +20,7 @@ class Camera:
         return (x, y)
 
     def logic(self, game):
-        self.scroll += 1 + sqrt(game.score / self.DOUBLE_SPEED_DELAY)
+        self.scroll += 1 + sqrt(self.scroll / self.DOUBLE_SPEED_DELAY)
         screen_pos = self.to_screen(game.player.pos)
 
         if screen_pos[0] > self.SCROLL_TRIGGER and game.player.vel.x > 1:

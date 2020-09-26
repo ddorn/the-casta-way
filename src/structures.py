@@ -7,9 +7,9 @@ from pygame import Vector2 as Vec
 
 from src.constants import Files, DEBUG_STRUCT
 from src.entities import Entity
-from src.entities.decor import Rock, Beer, Trunk, Bush, Bounce, Boost, Text, BoostDown, BoostUp
+from src.entities.decor import Rock, Beer, Trunk, Bush, Bounce, Boost, Text, BoostDown, BoostUp, Diamond
 
-OBJECTS = [Rock, Beer, Trunk, Bush, Bounce, Boost, BoostDown, BoostUp]
+OBJECTS = [Rock, Beer, Trunk, Bush, Bounce, Boost, BoostDown, BoostUp, Diamond]
 """Collection of objects in structures."""
 
 @dataclass

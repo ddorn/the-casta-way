@@ -1,7 +1,7 @@
 from pygame import Vector2 as Vec
 
 from src.animation import Sprite, Animation
-from src.constants import Files, GAME_SIZE, WHITE, BACKGROUND
+from src.constants import Files, WHITE, BACKGROUND
 from src.entities import Entity
 from src.utils import load_cached_image, get_font, get_sound
 
@@ -29,7 +29,7 @@ class Rock(Entity):
 
 
 class Beer(Entity):
-    SOLID = True
+    SOLID = False
 
     def __init__(self, pos):
         size = (8, 9)
@@ -77,7 +77,7 @@ class Bounce(Entity):
 
 class Boost(Entity):
     SOLID = False
-    KNOCKBACK = 16
+    KNOCKBACK = 14
     IMAGE = "boost.png"
     DIR = (1, 0)
 
@@ -93,12 +93,27 @@ class BoostUp(Boost):
     DIR = (0, -1)
     IMAGE = "boost_up.png"
 
+
 class BoostDown(Boost):
     DIR = (0, 1)
     IMAGE = "boost_down.png"
+
 
 class Text(Entity):
     def __init__(self, pos, text):
         s = get_font(16).render(text, True, WHITE, BACKGROUND)
         s.set_alpha(100)
         super(Text, self).__init__(pos, s.get_size(), Sprite(s))
+
+
+class Diamond(Entity):
+    SOLID = False
+
+    def __init__(self, pos, wrap=False):
+        diamond = load_cached_image(Files.IMAGES / "diamond.png")
+        super(Diamond, self).__init__(pos, (15, 15), Sprite(diamond), wrap=wrap)
+
+    def on_collision(self, other, dir):
+        get_sound('diamond_pickup').play()
+        other.bonus += 420
+        self.alive = False

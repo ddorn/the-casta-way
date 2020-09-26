@@ -79,6 +79,8 @@ class Player(Entity):
             for ((action, direction), (offset, width, speed)) in ANIMS.items()
         }
 
+        self.bonus = 0
+
         self.direction = DOWN
 
         self.attack_duration = -1
