@@ -1,6 +1,7 @@
 import string
 
 import pygame
+from pygame import Vector2 as Vec
 
 from src.constants import GOLD, GAME_SIZE, BACKGROUND
 from src.states.leaderboard import Leaderboard
@@ -47,10 +48,12 @@ class NameInputState(State):
             ("_", self.cursor_color())
         )
 
+        center = Vec(GAME_SIZE) / 2
+
         rinp = inp.get_rect()
-        rinp.midbottom = GAME_SIZE / 2
+        rinp.midbottom = center
         rname = name.get_rect()
-        rname.midtop = GAME_SIZE / 2
+        rname.midtop = center
 
         display.blit(inp, rinp)
         display.blit(name, rname)
