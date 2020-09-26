@@ -182,10 +182,8 @@ class Player(Entity):
             ...
 
     def on_collision(self, other, dir):
-        if isinstance(other, Beer):
-            other.alive = False
-            self.life = min(self.life + self.BEER_LIFE, self.MAX_LIFE)
-            get_sound('pickup', 1).play()
+        ...
+
 
     def foot_particles(self, game):
         if self.walking():
@@ -209,7 +207,7 @@ class Player(Entity):
 
     def footstep_sounds(self):
         if self.footstep_effect_duration % 9 == 0 and self.walking():
-            get_sound('footstep', 0.3).play()
+            get_sound('footstep').play()
 
         self.footstep_effect_duration += 1
 

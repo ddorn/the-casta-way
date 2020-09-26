@@ -7,7 +7,7 @@ from math import atan, pi
 
 import pygame
 
-from src.constants import Files, BACKGROUND, WHITE
+from src.constants import Files, BACKGROUND, WHITE, VOLUME
 
 
 def i(vec):
@@ -55,9 +55,9 @@ def draw_text(text, color=WHITE, bg_color=BACKGROUND, size=32, font_path=Files.M
 
 
 @lru_cache(maxsize=100)
-def get_sound(name, volume=1):
+def get_sound(name):
     sound = pygame.mixer.Sound((str(Files.SOUNDS / (name + '.wav'))))
-    sound.set_volume(volume)
+    sound.set_volume(VOLUME[name])
 
     return sound
 

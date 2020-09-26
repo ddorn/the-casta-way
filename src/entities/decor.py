@@ -36,6 +36,11 @@ class Beer(Entity):
         offset = (-1, -3)
         super().__init__(pos, size, Animation.from_sheet(Files.IMAGES / "beer.png", 9, 4, offset))
 
+    def on_collision(self, player, dir):
+        self.alive = False
+        player.life = min(player.life + player.BEER_LIFE, player.MAX_LIFE)
+        get_sound('pickup').play()
+
 
 class Trunk(Entity):
     SOLID = True
@@ -80,6 +85,7 @@ class Boost(Entity):
 
     def on_collision(self, player, dir):
         player.knock_back = Vec(1, 0) * self.KNOCKBACK
+        get_sound("boost").play()
 
 
 class Text(Entity):

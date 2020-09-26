@@ -12,6 +12,15 @@ GOLD = (0xfe, 0xcb, 0x20)
 DEBUG_STRUCT = True
 DEBUG_HITBOX = False
 
+VOLUME = {
+    "boost": 1,
+    "bounce": 1,
+    "footstep": 0.3,
+    "intro": 1,
+    "pickup": 0.1,
+    "soundtrack": 0.5,
+}
+
 class Files:
     # Directories
     ROOT = Path(__file__).parent.parent
