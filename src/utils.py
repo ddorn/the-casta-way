@@ -54,6 +54,11 @@ def draw_text(text, color=WHITE, bg_color=BACKGROUND, size=32, font_path=Files.M
     return font.render(text, False, color, bg_color)
 
 
+@lru_cache(maxsize=100)
+def get_sound(name):
+    return pygame.mixer.Sound((str(Files.SOUNDS / (name + '.wav'))))
+
+
 def colored_text(*args, bg=BACKGROUND, size=32, font_path=Files.MAIN_FONT):
     """
     Draw a line of colored text. The args are tuples (text, color)

@@ -88,6 +88,7 @@ class GameState(State):
 
         if not self.player.alive:
             pygame.mixer.music.fadeout(500)
+            pygame.mixer.stop()
             return GameOver(self.score)
         return self
 

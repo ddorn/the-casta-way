@@ -1,17 +1,16 @@
-from collections import namedtuple
 from math import pi
 from random import random, gauss, randrange
 
 import pygame
 from pygame import Vector2 as Vec
+from pygame.mixer import Sound
 
 from src.animation import Animation, SpriteCompo, Sprite
 from src.constants import Files
 from src.entities import Entity, Particle
 from src.entities.decor import Beer
-
 # Directions
-from src.utils import angle
+from src.utils import angle, get_sound
 
 # Those correspond to the filenames of the animations
 RIGHT = "right"
@@ -88,6 +87,7 @@ class Player(Entity):
 
         self.foot_step_particle_delay = 0
         self.life = self.MAX_LIFE
+        self.previous_walking_state = False
 
         self.knock_back = Vec()
 
@@ -145,6 +145,7 @@ class Player(Entity):
 
         self.set_sprite()
         self.foot_particles(game)
+        self.footstep_sounds()
 
 
     def move(self, game):
@@ -185,10 +186,12 @@ class Player(Entity):
         if isinstance(other, Beer):
             other.alive = False
             self.life = min(self.life + self.BEER_LIFE, self.MAX_LIFE)
+            get_sound('pickup').play()
 
     def foot_particles(self, game):
         if self.walking():
             self.foot_step_particle_delay -= 1
+
 
         # if self.foot_step_particle_delay <= 0:
         if random() < self.vel.length_squared() / (self.SPEED ** 2 * 6):
@@ -198,12 +201,19 @@ class Player(Entity):
             a = gauss(angle(self.vel) + pi, 0.5)
             s = gauss(0.5, 0.1)
 
-            game.particles.add( Particle(
+            game.particles.add(Particle(
                 self.feet(),
                 speed=s,
                 angle=a,
                 friction=0.05,
                 size=randrange(1, 3),
                 color=0x995544
-            ) )
+            ))
 
+    def footstep_sounds(self):
+        if self.previous_walking_state and not self.walking():
+            get_sound('footstep').stop()
+        elif not self.previous_walking_state and self.walking():
+            get_sound('footstep').play(-1)
+
+        self.previous_walking_state = self.walking()
