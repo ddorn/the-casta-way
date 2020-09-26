@@ -140,7 +140,6 @@ class GameState(State):
     def draw_health_bar(self, display):
         prop = self.player.life / self.player.MAX_LIFE * 119
 
-
         # Draw the health bar
         rect = self.health_bar.get_rect()
         rect.midtop = (200, 54)
@@ -155,16 +154,16 @@ class GameState(State):
             if r.right < self.camera.scroll:
                 self.struct_rects.remove(r)
 
-        if random() < 0.04:
-            s = choice(self.structures)
-            y = randrange(75, 275 - s.height)
-            rect = Rect(right, y, s.width + 20, s.height + 20)
+        s = choice(self.structures)
+        # print(s.name, s.height)
+        y = randrange(80, 261 - s.height)
+        rect = Rect(right, y, s.width + 35, s.height + 35)
 
-            if not any(r.colliderect(rect) for r in self.struct_rects):
-                self.struct_rects.append(rect)
-                self.entities.extend(
-                    s.spawn(Vec(right, y))
-                )
+        if not any(r.colliderect(rect) for r in self.struct_rects):
+            self.struct_rects.append(rect)
+            self.entities.extend(
+                s.spawn(Vec(right, y))
+            )
 
         if random() < 0.04:
             self.entities.append(Beer(

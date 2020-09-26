@@ -55,7 +55,6 @@ class Player(Entity):
     SOLID = True
     MASS = 1.0
     MAX_LIFE = 100
-    BEER_LIFE = 10
     KNOCKBACK_RESIST = 0.6
 
     def __init__(self):

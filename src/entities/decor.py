@@ -30,6 +30,7 @@ class Rock(Entity):
 
 class Beer(Entity):
     SOLID = False
+    LIFE = 5
 
     def __init__(self, pos):
         size = (8, 9)
@@ -38,7 +39,7 @@ class Beer(Entity):
 
     def on_collision(self, player, dir):
         self.alive = False
-        player.life = min(player.life + player.BEER_LIFE, player.MAX_LIFE)
+        player.life = min(player.life + self.LIFE, player.MAX_LIFE)
         get_sound('pickup').play()
 
 
